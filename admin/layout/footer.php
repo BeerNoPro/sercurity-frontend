@@ -2,5 +2,11 @@
             </div>
         </div>
     </body>
-    <script src=""></script>
+    <script src="">
+        // $(document).ready(function () {
+        //     $(document).on('click', '.nav-item', function () {
+        //         console.log(this);
+        //     });
+        // });
+    </script>
 </html>

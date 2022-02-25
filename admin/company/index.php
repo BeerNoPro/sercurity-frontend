@@ -92,6 +92,7 @@
             </div>
         </div>
         <!-- end modal show detail -->
+        <div id="contentSearch"></div>
     </div>
 </div>
 
@@ -104,6 +105,11 @@
     $(document).ready(function () {
         // Link url request
         var urlApi = 'http://127.0.0.1:8000/api/admin/company/';
+        var urlApiSearch = 'http://127.0.0.1:8000/api/admin/company-search/';
+
+        // $(document).on('click', '.nav-item', function () {
+        //     console.log(this);
+        // });
 
         // Show input datepicker 
         $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
@@ -130,7 +136,7 @@
                             $('.table-show-lists').append(`
                                 <tr>
                                     <th>${key+1}</th>
-                                    <td data-id="${value.id}" class="table-name">
+                                    <td data-id="${value.id}" class="table-name hover-text-click">
                                         ${value.name}
                                     </td>
                                     <td>${value.address}</td>
@@ -151,6 +157,150 @@
             });
         }
 
+        // Function show content detail
+        function showContentDetail(urlApi, id) {
+            $.get({
+                url: urlApi + id,
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 200) {
+                        $('.table-show-detail').html('');
+                        $('#modalShowDetail').modal('show');
+                        $('.table-show-detail').append(`
+                            <tr>
+                                <th>Id:</th>
+                                <td>${response.data.id}</td>
+                            </tr>
+                            <tr>
+                                <th>Name:</th>
+                                <td>${response.data.name}</td>
+                            </tr>
+                            <tr>
+                                <th>Address:</th>
+                                <td>${response.data.address}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>${response.data.email}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone:</th>
+                                <td>${response.data.phone}</td>
+                            </tr>
+                            <tr>
+                                <th>Date incorporation:</th>
+                                <td>${response.data.date_incorporation}</td>
+                            </tr>
+                            <tr>
+                                <th>Date created:</th>
+                                <td>${response.data.created_at}</td>
+                            </tr>
+                            <tr>
+                                <th>Date updated:</th>
+                                <td>${response.data.updated_at}</td>
+                            </tr>
+                        `);
+                    } else {
+                        // alert notification add fail
+                        alertify.set('notifier','position', 'top-right');
+                        alertify.error(response.message);
+                    }
+                }
+            });
+        }
+
+        // show list suggestions content
+        $('input[name=search]').keyup(function(){
+            let nameSearch = $(this).val();
+            if (nameSearch != '') {
+                $.get({
+                    url: urlApiSearch + nameSearch,
+                    dataType: 'json',
+                    success: function (response) {
+                        // console.log(response);
+                        if (response.status == 200) {
+                            $('.result-search').removeClass('d-none');
+                            $('.result-search').html('');
+                            $.each(response.data, function (key, item) {
+                                $('.result-search').append(`
+                                    <li class="hover-text-click" data-id="${item.id}" >${item.name}</li>
+                                `);
+                            });
+                        } else {
+                            $('.result-search').addClass('d-none');
+                        }
+                    }
+                });
+            } else {
+                $('.result-search').addClass('d-none');
+            }
+        }); 
+
+        // Click show search content detail
+        $(document).on('click', '.result-search li', function () {
+            let id = $(this).attr('data-id');
+            let content = $(this).text();
+            $('input[name=search]').val(content);
+            $('.result-search').addClass('d-none');
+            showContentDetail(urlApi, id);
+        });
+
+        // Click button search content
+        $(document).on('click', '.btn-search', function (e) {
+            e.preventDefault();
+            let contentSearch = $('input[name=search]').val();
+            $.get({
+                url: urlApiSearch + contentSearch,
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 200) {
+                        $('.table-show-detail').html('');
+                        $('#modalShowDetail').modal('show');
+                        $.each(response.data, function (key, item) {
+                            $('.table-show-detail').append(`
+                                <tr>
+                                    <th>Id:</th>
+                                    <td>${item.id}</td>
+                                </tr>
+                                <tr>
+                                    <th>Name:</th>
+                                    <td>${item.name}</td>
+                                </tr>
+                                <tr>
+                                    <th>Address:</th>
+                                    <td>${item.address}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email:</th>
+                                    <td>${item.email}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone:</th>
+                                    <td>${item.phone}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date incorporation:</th>
+                                    <td>${item.date_incorporation}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date created:</th>
+                                    <td>${item.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date updated:</th>
+                                    <td>${item.updated_at}</td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        // alert notification add fail
+                        alertify.set('notifier','position', 'top-right');
+                        alertify.error(response.message);
+                    }
+                }
+            });
+        });
+
         // Reset error list
         $(document).on('input', function () {
             $('#save_error_list').addClass('d-none');
@@ -161,7 +311,7 @@
         $(document).on('click', '.show-modal', function () {
             $('.modal-backdrop').show();
             $('input').val('');
-            $('.modal-title').html('Add data');
+            $('#modalContents .modal-title').html('Add data');
             $('.btn-handel').html('Add');
             $('.btn-handel').removeClass('btn-primary btn-update');
             $('.btn-handel').addClass('btn-success btn-add');
@@ -215,7 +365,7 @@
                         // Handle form edit
                         $('.modal-backdrop').show();
                         $('#modalContents').modal('show');
-                        $('.modal-title').html('Edit data');
+                        $('#modalContents .modal-title').html('Edit data');
                         $('.btn-handel').html('Update');
                         $('.btn-handel').removeClass('btn-success btn-add');
                         $('.btn-handel').addClass('btn-primary btn-update');
@@ -272,61 +422,7 @@
         // Show content detail
         $(document).on('click', '.table-name', function () {
             let id = $(this).attr('data-id');
-            $.get({
-                url: urlApi + id,
-                dataType: "json",
-                success: function (response) {
-                    if (response.status == 200) {
-                        $('.table-show-detail').html('');
-                        $('#modalShowDetail').modal('show');
-                        $('.table-show-detail').append(`
-                            <tr>
-                                <th>Id:</th>
-                                <td>${response.data.id}</td>
-                            </tr>
-                            <tr>
-                                <th>Name:</th>
-                                <td>${response.data.name}</td>
-                            </tr>
-                            <tr>
-                                <th>Address:</th>
-                                <td>${response.data.address}</td>
-                            </tr>
-                            <tr>
-                                <th>Email:</th>
-                                <td>${response.data.email}</td>
-                            </tr>
-                            <tr>
-                                <th>Phone:</th>
-                                <td>${response.data.phone}</td>
-                            </tr>
-                            <tr>
-                                <th>Date incorporation:</th>
-                                <td>${response.data.date_incorporation}</td>
-                            </tr>
-                            <tr>
-                                <th>Date created:</th>
-                                <td>${response.data.created_at}</td>
-                            </tr>
-                            <tr>
-                                <th>Date updated:</th>
-                                <td>${response.data.updated_at}</td>
-                            </tr>
-                        `);
-                    } else {
-                        // alert notification add fail
-                        alertify.set('notifier','position', 'top-right');
-                        alertify.error(response.message);
-                    }
-                }
-            });
-        });
-
-        // Search content
-        $(document).on('click', '.btn-search', function (e) {
-            e.preventDefault();
-            let contentSearch = $('input[name=search]').val();
-            console.log(contentSearch);
+            showContentDetail(urlApi, id);
         });
     });
 </script>

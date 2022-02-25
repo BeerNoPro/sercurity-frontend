@@ -1,15 +1,63 @@
+/* start common */
+.hover-text-click:hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+/* end common */
+
+/* start header */
 .header-content {
     height: 8vh;
 }
 
+.nav-item:hover {
+    background-color: #ccc;
+}
+
+.btn-search-box:hover {
+    background-color: blue;
+    border-radius: 6px;
+}
+
+.input-search {
+    position: relative;
+}
+
+.result-search {
+    position: absolute;
+    background-color: #212529;
+    color: white;
+    top: 80%;
+    list-style-type: none;
+    padding: 12px 0px;
+}
+
+.result-search li {
+    padding: 8px 28px;
+}
+
+.result-search li:hover {
+    background-color: #fff;
+}
+/* end header */
+
+/* start content */
 .row-content {
     height: 92vh;
 }
 
-.table-name {
-    cursor: pointer;
+.table-name:hover {
+    background-color: #ccc;
 }
 
+/* end header */
+
+/* start footer */
+
+/* end footer */
+
+/* css icon completed */
 #icon-loading {
     position: absolute;
     right: 50%;

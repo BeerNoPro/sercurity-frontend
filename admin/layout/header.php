@@ -41,13 +41,15 @@
                             <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-center" href="#">Security project admin</a>
                         </div>
                         <div class="col-md-10 d-flex ps-0">
-                            <input class="form-control form-control-dark w-100" type="text" name="search"
-                            placeholder=" Search..." aria-label="Search">
-                            <ul class="navbar-nav px-3">
+                            <input class="form-control form-control-dark w-100 input-search" type="text" name="search"
+                            placeholder=" Search..." autocomplete="off">
+                            <!-- onkeyup="showHint(this.value)" -->
+                            <ul class="navbar-nav px-3 ms-3 btn-search-box">
                                 <li class="nav-item-logout text-nowrap btn-search">
                                     <a class="nav-link" href="">Search</a>
                                 </li>
                             </ul>
+                            <ul class="result-search d-none"></ul>
                         </div>
                     </div>
                 </nav>
