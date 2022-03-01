@@ -38,7 +38,9 @@
                 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow p-3">
                     <div class="row w-100">
                         <div class="col-md-2">
-                            <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-center" href="#">Security project admin</a>
+                            <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-center" href="#">
+                                View admin
+                            </a>
                         </div>
                         <div class="col-md-10 d-flex ps-0">
                             <input class="form-control form-control-dark w-100 input-search" type="text" name="search"

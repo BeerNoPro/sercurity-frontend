@@ -1,12 +1,12 @@
-/* start common */
+/* Start common */
 .hover-text-click:hover {
     color: blue;
     text-decoration: underline;
     cursor: pointer;
 }
-/* end common */
+/* End common */
 
-/* start header */
+/* Start header */
 .header-content {
     height: 8vh;
 }
@@ -40,9 +40,9 @@
 .result-search li:hover {
     background-color: #fff;
 }
-/* end header */
+/* End header */
 
-/* start content */
+/* Start content */
 .row-content {
     height: 92vh;
 }
@@ -51,13 +51,17 @@
     background-color: #ccc;
 }
 
-/* end header */
+.table-show-detail-hr {
+    border: 1px solid #ccc;
+}
 
-/* start footer */
+/* End header */
 
-/* end footer */
+/* Start footer */
 
-/* css icon completed */
+/* End footer */
+
+/* Css icon completed */
 #icon-loading {
     position: absolute;
     right: 50%;
