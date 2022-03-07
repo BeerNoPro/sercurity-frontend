@@ -24,10 +24,10 @@
                     <th scope="col">Stt</th>
                     <th scope="col">Name project</th>
                     <th scope="col">Name member</th>
-                    <th scope="col">Role</th>
+                    <th scope="col">Work position in project</th>
                     <th scope="col">Time member join</th>
                     <th scope="col">Time member completed</th>
-                    <th colspan="2">Action</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>

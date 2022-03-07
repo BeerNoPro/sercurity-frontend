@@ -22,7 +22,7 @@
             <thead>
                 <tr>
                     <th scope="col">Stt</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">Cabinet name</th>
                     <th scope="col">Work room name</th>
                     <th scope="col">Member name</th>
                     <th scope="col">Action</th>

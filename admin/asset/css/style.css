@@ -1,4 +1,5 @@
 /* Start common */
+.tbody-primary td:hover,
 .hover-text-click:hover {
     color: blue;
     text-decoration: underline;
@@ -55,7 +56,7 @@
     border: 1px solid #ccc;
 }
 
-/* End header */
+/* End content */
 
 /* Start footer */
 

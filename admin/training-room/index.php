@@ -22,13 +22,15 @@
             <thead>
                 <tr>
                     <th scope="col">Stt</th>
-                    <th scope="col">Name trainer</th>
-                    <th scope="col">Name trained</th>
+                    <th scope="col">Trainer name</th>
+                    <th scope="col">Trained name</th>
+                    <th scope="col">Project name</th>
+                    <th scope="col">Training content</th>
                     <th scope="col">Time start</th>
                     <th scope="col">Time completed</th>
                     <th scope="col">Result</th>
                     <th scope="col">Note</th>
-                    <th colspan="2">Action</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>

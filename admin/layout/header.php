@@ -39,7 +39,7 @@
                     <div class="row w-100">
                         <div class="col-md-2">
                             <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-center" href="#">
-                                View admin
+                                Security
                             </a>
                         </div>
                         <div class="col-md-10 d-flex ps-0">

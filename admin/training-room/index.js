@@ -1,16 +1,22 @@
 $(document).ready(function () {
     // Link url request
     var urlApi = 'http://127.0.0.1:8000/api/admin/training-room/';
-    var urlApiForeignKey = 'http://127.0.0.1:8000/api/admin/training-room-foreign/';
     var urlApiEdit = 'http://127.0.0.1:8000/api/admin/training-room-edit/';
     var urlApiUpdate = 'http://127.0.0.1:8000/api/admin/training-room-update/';
     var urlApiSearch = 'http://127.0.0.1:8000/api/admin/training-room-search/';
     var urlApiSupQuery = 'http://127.0.0.1:8000/api/admin/training-room-sub-query/';
+    var urlApiForeignKey = 'http://127.0.0.1:8000/api/admin/training-room-foreign/';
+
+    var urlApiShowMember = 'http://127.0.0.1:8000/api/admin/member-edit/';
+    var urlApiShowProject = 'http://127.0.0.1:8000/api/admin/project-edit/';
 
     var table1 = 'training';
     var table2 = 'member';
     var select1 = $('#select-1');
     var select2 = $('#select-2');
+
+    // Edit placeholder
+    $('input[name=search]').attr('placeholder', 'Search name trainer...');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -19,34 +25,31 @@ $(document).ready(function () {
             url: urlApi,
             dataType: "json",
             success: function (response) {
-                // console.log(response);
+                // console.log(response.data.data);
                 if (response.status == 200) {
                     // Handle content table
                     $('#error').addClass('d-none');
                     $('.table-show-lists').html('');
                     $.each(response.data.data, function (key, value) {
                         $('.table-show-lists').append(`
-                            <tr>
+                            <tr t-id="${value.training_id}" m-id="${value.member_id}">
                                 <th>${response.index++}</th>
-                                <td data-id="${value.training_id}" class="data-id-1">
-                                    ${value.trainer_name}
+                                <td data-id="${value.training.trainer}" class="member hover-text-click">
+                                    ${value.training.trainer_name}
                                 </td>
-                                <td data-id="${value.trained_id}" class="data-id-2">
-                                    ${value.trained_name}
+                                <td data-id="${value.member_id}" class="member hover-text-click">
+                                    ${value.trained.name}
                                 </td>
+                                <td data-id="${value.training.project_id}" class="project hover-text-click">
+                                    ${value.training.project_name}
+                                </td>
+                                <td>${value.training.content}</td>
                                 <td>${value.date_start}</td>
                                 <td>${value.date_completed}</td>
                                 <td>${value.result}</td>
                                 <td>${value.note}</td>
                                 <td>
-                                    <button data-id-1="${value.training_id}" data-id-2="${value.trained_id}" 
-                                        class="btn btn-warning btn-sm btn-edit"
-                                    >Edit</button>
-                                </td>
-                                <td>
-                                    <button data-id-1="${value.training_id}" data-id-2="${value.trained_id}" 
-                                        class="btn btn-primary btn-sm btn-show"
-                                    >show</button>
+                                    <button class="btn btn-warning btn-sm btn-edit">Edit</button>
                                 </td>
                             </tr>
                         `);
@@ -76,70 +79,177 @@ $(document).ready(function () {
     }
 
     // Function get content table detail
-    function contentTableDetail(data) {
+    function contentTableDetail(data, table) {
         // console.log(data);
         $('.table-show-detail').html('');
         $('#modalShowDetail').modal('show');
-        $.each(data, function (key, item) {
-            $('.table-show-detail').append(`
-                <tr>
-                    <th>Trainer id:</th>
-                    <td>${item.trainer_id}</td>
-                </tr>
-                <tr>
-                    <th>Trainer name:</th>
-                    <td>${item.trainer_name}</td>
-                </tr>
-                <tr>
-                    <th>Trained id:</th>
-                    <td>${item.trained_id}</td>
-                </tr>
-                <tr>
-                    <th>Trained name:</th>
-                    <td>${item.trained_name}</td>
-                </tr>
-                <tr>
-                    <th>Time start:</th>
-                    <td>${item.date_start}</td>
-                </tr>
-                <tr>
-                    <th>Time completed:</th>
-                    <td>${item.date_completed}</td>
-                </tr>
-                <tr>
-                    <th>Result:</th>
-                    <td>${item.result}</td>
-                </tr>
-                <tr>
-                    <th>Note:</th>
-                    <td>${item.note}</td>
-                </tr>
-                <tr>
-                    <th>Date created:</th>
-                    <td>${item.created_at}</td>
-                </tr>
-                <tr>
-                    <th>Date updated:</th>
-                    <td>${item.updated_at}</td>
-                </tr>
-            `);
-        });
+        switch (table) {
+            case 'member':
+                $.each(data, function (key, item) {
+                    // console.log(item);
+                    $('.table-show-detail').append(`
+                        <tr>
+                            <th>Id:</th>
+                            <td>${item.id}</td>
+                        </tr>
+                        <tr>
+                            <th>Name:</th>
+                            <td>${item.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>${item.email}</td>
+                        </tr>
+                        <tr>
+                            <th>Address:</th>
+                            <td>${item.address}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone number:</th>
+                            <td>${item.phone_number}</td>
+                        </tr>
+                        <tr>
+                            <th>Work position:</th>
+                            <td>${item.work_position}</td>
+                        </tr>
+                        <tr>
+                            <th>Date join company:</th>
+                            <td>${item.date_join_company}</td>
+                        </tr>
+                        <tr>
+                            <th>Date left company:</th>
+                            <td>${item.date_left_company}</td>
+                        </tr>
+                        <tr>
+                            <th>Company id:</th>
+                            <td>${item.company.id}</td>
+                        </tr>
+                        <tr>
+                            <th>Company name:</th>
+                            <td>${item.company.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Date created:</th>
+                            <td>${item.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Date updated:</th>
+                            <td>${item.updated_at}</td>
+                        </tr>
+                    `);
+                });
+                break;
+            case 'project':
+                $.each(data, function (key, item) {
+                    $('.table-show-detail').append(`
+                        <tr>
+                            <th>Project id:</th>
+                            <td>${item.id}</td>
+                        </tr>
+                        <tr>
+                            <th>Company id:</th>
+                            <td>${item.company.id}</td>
+                        </tr>
+                        <tr>
+                            <th>Work room id:</th>
+                            <td>${item.work_room.id}</td>
+                        </tr>
+                        <tr>
+                            <th>Name:</th>
+                            <td>${item.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Time start:</th>
+                            <td>${item.time_start}</td>
+                        </tr>
+                        <tr>
+                            <th>Time completed:</th>
+                            <td>${item.time_completed}</td>
+                        </tr>
+                        <tr>
+                            <th>Company name:</th>
+                            <td>${item.company.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Work room name:</th>
+                            <td>${item.work_room.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Work room location:</th>
+                            <td>${item.work_room.location}</td>
+                        </tr>
+                        <tr>
+                            <th>Date created:</th>
+                            <td>${item.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Date updated:</th>
+                            <td>${item.updated_at}</td>
+                        </tr>
+                    `);
+                });
+                break;
+            default:
+                $.each(data, function (key, item) {
+                    $('.table-show-detail').append(`
+                        <tr>
+                            <th>Trainer id:</th>
+                            <td>${item.trainer_id}</td>
+                        </tr>
+                        <tr>
+                            <th>Trainer name:</th>
+                            <td>${item.trainer_name}</td>
+                        </tr>
+                        <tr>
+                            <th>Trained id:</th>
+                            <td>${item.trained_id}</td>
+                        </tr>
+                        <tr>
+                            <th>Trained name:</th>
+                            <td>${item.trained_name}</td>
+                        </tr>
+                        <tr>
+                            <th>Time start:</th>
+                            <td>${item.date_start}</td>
+                        </tr>
+                        <tr>
+                            <th>Time completed:</th>
+                            <td>${item.date_completed}</td>
+                        </tr>
+                        <tr>
+                            <th>Result:</th>
+                            <td>${item.result}</td>
+                        </tr>
+                        <tr>
+                            <th>Note:</th>
+                            <td>${item.note}</td>
+                        </tr>
+                        <tr>
+                            <th>Date created:</th>
+                            <td>${item.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Date updated:</th>
+                            <td>${item.updated_at}</td>
+                        </tr>
+                    `);
+                });
+                break;
+        }
     }
 
     // Function show content detail
-    function showContentDetail(urlApi, data) {
-        $.post({
+    function showContentDetail(urlApi, table) {
+        $.get({
             url: urlApi,
-            data: data,
             dataType: "json",
             success: function (response) {
                 // console.log(response);
                 if (response.status == 200) {
-                    contentTableDetail(response.data);
+                    contentTableDetail(response.data, table);
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -158,8 +268,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -179,12 +288,25 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
     }
+
+    // Click name content show detail
+    $(document).on('click', '.member', function () {
+        let mId = $(this).attr('data-id');
+        let url = urlApiShowMember + mId
+        showContentDetail(url, table = 'member');
+    });
+
+    // Click name content show detail
+    $(document).on('click', '.project', function () {
+        let pId = $(this).attr('data-id');
+        let url = urlApiShowProject + pId;
+        showContentDetail(url, table = 'project');
+    });
 
     // Get content foreign key in table
     $(document).on('click', '.show-modal', function () {
@@ -194,7 +316,7 @@ $(document).ready(function () {
 
     // show list suggestions content
     $('input[name=search]').keyup(function () {
-        let nameSearch = $(this).val();
+        let nameSearch = $(this).val().replace(/ /g, "");
         if (nameSearch != '') {
             $.get({
                 url: urlApiSearch + nameSearch,
@@ -205,11 +327,13 @@ $(document).ready(function () {
                         $('.result-search').removeClass('d-none');
                         $('.result-search').html('');
                         $.each(response.data, function (key, item) {
-                            $('.result-search').append(`
-                                <li class="hover-text-click" data-id-1="${item.training_id}" data-id-2="${item.member_id}" >
-                                    ${item.trainer_name}
-                                </li>
-                            `);
+                            if (item.training) {
+                                $('.result-search').append(`
+                                    <li class="hover-text-click" data-id="${item.training.trainer}">
+                                        ${item.training.trainer_name}
+                                    </li>
+                                `);
+                            }
                         });
                     } else {
                         $('.result-search').addClass('d-none');
@@ -223,16 +347,12 @@ $(document).ready(function () {
 
     // Click show suggestions content detail
     $(document).on('click', '.result-search li', function () {
-        let id1 = $(this).attr('data-id-1');
-        let id2 = $(this).attr('data-id-2');
+        let id = $(this).attr('data-id');
         let content = $(this).text().trim();
+        let url = urlApiShowMember + id;
         $('input[name=search]').val(content);
         $('.result-search').addClass('d-none');
-        let data = {
-            'training_id': id1,
-            'member_id': id2
-        };
-        showContentDetail(urlApiEdit, data);
+        showContentDetail(url, table = 'member');
     });
 
     // Click button search content
@@ -243,12 +363,12 @@ $(document).ready(function () {
             url: urlApiSearch + contentSearch,
             dataType: "json",
             success: function (response) {
+                // console.log(response.data);
                 if (response.status == 200) {
-                    contentTableDetail(response.data);
+                    // contentTableDetail(response.data, table = 'member');
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -284,8 +404,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -295,8 +414,7 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -304,15 +422,10 @@ $(document).ready(function () {
 
     // Edit content
     $(document).on('click', '.btn-edit', function () {
-        let id1 = $(this).attr('data-id-1');
-        let id2 = $(this).attr('data-id-2');
-        let data = {
-            'training_id': id1,
-            'member_id': id2
-        };
-        $.post({
-            url:urlApiEdit,
-            data: data,
+        let tId = $(this).closest('tr').attr('t-id');
+        let mId = $(this).closest('tr').attr('m-id');
+        $.get({
+            url: urlApiEdit + tId + '/' + mId,
             dataType: "json",
             success: function (response) {
                 // console.log(response);
@@ -337,8 +450,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -359,7 +471,7 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 400) {
                     $('#save_error_list').removeClass('d-none');
                     $.each(response.error, function (indexInArray, valueOfElement) { 
@@ -367,8 +479,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -377,21 +488,10 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
     });
 
-    // Click name content show detail
-    $(document).on('click', '.btn-show', function () {
-        let id1 = $(this).attr('data-id-1');
-        let id2 = $(this).attr('data-id-2');
-        let data = {
-            'training_id': id1,
-            'member_id': id2
-        };
-        showContentDetail(urlApiEdit, data);
-    });
 });

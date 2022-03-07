@@ -25,9 +25,8 @@
                     <th scope="col">Name</th>
                     <th scope="col">Time start</th>
                     <th scope="col">Time completed</th>
-                    <th scope="col">Name company</th>
-                    <th scope="col">Name work rom</th>
-                    <th scope="col">Location work rom</th>
+                    <th scope="col">Company name</th>
+                    <th scope="col">Work room name</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>

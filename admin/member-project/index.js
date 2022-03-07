@@ -10,6 +10,9 @@ $(document).ready(function () {
     var table2 = 'member';
     var select1 = $('#select-1');
     var select2 = $('#select-2');
+
+    // Edit placeholder
+    $('input[name=search]').attr('placeholder', 'Search name project...');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -24,26 +27,21 @@ $(document).ready(function () {
                     $('.table-show-lists').html('');
                     $.each(response.data.data, function (key, value) {
                         $('.table-show-lists').append(`
-                            <tr>
+                            <tr p-id="${value.project_id}" m-id="${value.member_id}">
                                 <th>${response.index++}</th>
-                                <td data-id="${value.project_id}" class="data-id-1">
-                                    ${value.project_name}
+                                <td name="project" class="table-name hover-text-click">
+                                    ${value.project.name}
                                 </td>
-                                <td data-id="${value.member_id}" class="data-id-2">
-                                    ${value.member_name}
+                                <td name="member" class="table-name hover-text-click">
+                                    ${value.member.name}
                                 </td>
                                 <td>${value.role}</td>
                                 <td>${value.time_member_join}</td>
                                 <td>${value.time_member_completed}</td>
                                 <td>
-                                    <button data-id-1="${value.project_id}" data-id-2="${value.member_id}" 
-                                        class="btn btn-warning btn-sm btn-edit"
-                                    >Edit</button>
-                                </td>
-                                <td>
-                                    <button data-id-1="${value.project_id}" data-id-2="${value.member_id}" 
-                                        class="btn btn-primary btn-sm btn-show"
-                                    >show</button>
+                                    <button class="btn btn-warning btn-sm btn-edit">
+                                        Edit
+                                    </button>
                                 </td>
                             </tr>
                         `);
@@ -73,66 +71,172 @@ $(document).ready(function () {
     }
 
     // Function get content table detail
-    function contentTableDetail(data) {
+    function contentTableDetail(data, table) {
         // console.log(data);
         $('.table-show-detail').html('');
         $('#modalShowDetail').modal('show');
-        $.each(data, function (key, item) {
-            $('.table-show-detail').append(`
-                <tr>
-                    <th>Project id:</th>
-                    <td>${item.project_id}</td>
-                </tr>
-                <tr>
-                    <th>Project name:</th>
-                    <td>${item.project_name}</td>
-                </tr>
-                <tr>
-                    <th>Member id:</th>
-                    <td>${item.member_id}</td>
-                </tr>
-                <tr>
-                    <th>Member name:</th>
-                    <td>${item.member_name}</td>
-                </tr>
-                <tr>
-                    <th>Time member join:</th>
-                    <td>${item.time_member_join}</td>
-                </tr>
-                <tr>
-                    <th>Time member completed:</th>
-                    <td>${item.time_member_completed}</td>
-                </tr>
-                <tr>
-                    <th>Role:</th>
-                    <td>${item.role}</td>
-                </tr>
-                <tr>
-                    <th>Date created:</th>
-                    <td>${item.created_at}</td>
-                </tr>
-                <tr>
-                    <th>Date updated:</th>
-                    <td>${item.updated_at}</td>
-                </tr>
-                <tr class="table-show-detail-hr"></tr>
-            `);
-        });
+        switch (table) {
+            case 'project':
+                $.each(data, function (key, item) {
+                    $('.table-show-detail').append(`
+                        <tr>
+                            <th>Project id:</th>
+                            <td>${item.project.id}</td>
+                        </tr>
+                        <tr>
+                            <th>Project name:</th>
+                            <td>${item.project.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Time start:</th>
+                            <td>${item.project.time_start}</td>
+                        </tr>
+                        <tr>
+                            <th>Time completed:</th>
+                            <td>${item.project.time_completed}</td>
+                        </tr>
+                        <tr>
+                            <th>Date created_at:</th>
+                            <td>${item.project.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Date updated_at:</th>
+                            <td>${item.project.updated_at}</td>
+                        </tr>
+                    `);
+                });
+                break;
+            case 'member':
+                $.each(data, function (key, item) {
+                    $('.table-show-detail').append(`
+                        <tr>
+                            <th>Member id:</th>
+                            <td>${item.member.id}</td>
+                        </tr>
+                        <tr>
+                            <th>Member name:</th>
+                            <td>${item.member.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Member email:</th>
+                            <td>${item.member.email}</td>
+                        </tr>
+                        <tr>
+                            <th>Address:</th>
+                            <td>${item.member.address}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone:</th>
+                            <td>${item.member.phone_number}</td>
+                        </tr>
+                        <tr>
+                            <th>Work position:</th>
+                            <td>${item.member.work_position}</td>
+                        </tr>
+                        <tr>
+                            <th>Date join company:</th>
+                            <td>${item.member.date_join_company}</td>
+                        </tr>
+                        <tr>
+                            <th>Date left company:</th>
+                            <td>${item.member.date_left_company}</td>
+                        </tr>
+                        <tr>
+                            <th>Date created_at:</th>
+                            <td>${item.member.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Date updated_at:</th>
+                            <td>${item.member.updated_at}</td>
+                        </tr>
+                    `);
+                });
+                break;
+            case 'search':
+                $.each(data, function (key, item) {
+                    $('.table-show-detail').append(`
+                        <tr>
+                            <th>Project name:</th>
+                            <td>${item.project_name}</td>
+                        </tr>
+                        <tr>
+                            <th>Member name:</th>
+                            <td>${item.member_name}</td>
+                        </tr>
+                        <tr>
+                            <th>Work position in project:</th>
+                            <td>${item.role}</td>
+                        </tr>
+                        <tr>
+                            <th>Date member join:</th>
+                            <td>${item.time_member_join}</td>
+                        </tr>
+                        <tr>
+                            <th>Date member completed:</th>
+                            <td>${item.time_member_completed}</td>
+                        </tr>
+                        <tr>
+                            <th>Date created_at:</th>
+                            <td>${item.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Date updated_at:</th>
+                            <td>${item.updated_at}</td>
+                        </tr>
+                    `);
+                });
+                break;
+            default:
+                $.each(data, function (key, item) {
+                    if (item.project) {
+                        $('.table-show-detail').append(`
+                            <tr>
+                                <th>Project name:</th>
+                                <td>${item.project.name}</td>
+                            </tr>
+                            <tr>
+                                <th>Member name:</th>
+                                <td>${item.member.name}</td>
+                            </tr>
+                            <tr>
+                                <th>Work position in project:</th>
+                                <td>${item.role}</td>
+                            </tr>
+                            <tr>
+                                <th>Date member join:</th>
+                                <td>${item.time_member_join}</td>
+                            </tr>
+                            <tr>
+                                <th>Date member completed:</th>
+                                <td>${item.time_member_completed}</td>
+                            </tr>
+                            <tr>
+                                <th>Date created_at:</th>
+                                <td>${item.created_at}</td>
+                            </tr>
+                            <tr>
+                                <th>Date updated_at:</th>
+                                <td>${item.updated_at}</td>
+                            </tr>
+                        `);
+                    }
+                });
+                break;
+        }
     }
 
     // Function show content detail
-    function showContentDetail(urlApi, data) {
-        $.post({
+    function showContentDetail(urlApi, table) {
+        $.get({
             url: urlApi,
-            data: data,
             dataType: "json",
             success: function (response) {
+                // console.log(response);
                 if (response.status == 200) {
-                    contentTableDetail(response.data);
+                    contentTableDetail(response.data, table);
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -151,8 +255,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -160,21 +263,26 @@ $(document).ready(function () {
 
     // show list suggestions content
     $('input[name=search]').keyup(function () {
-        let nameSearch = $(this).val();
+        let nameSearch = $(this).val().replace(/ /g, "");
         if (nameSearch != '') {
             $.get({
                 url: urlApiSearch + nameSearch,
                 dataType: 'json',
                 success: function (response) {
+                    // console.log(response);
                     if (response.status == 200) {
                         $('.result-search').removeClass('d-none');
                         $('.result-search').html('');
                         $.each(response.data, function (key, item) {
-                            $('.result-search').append(`
-                                <li class="hover-text-click" data-id-1="${item.project_id}" data-id-2="${item.member_id}" >
-                                    ${item.project_name}
-                                </li>
-                            `);
+                            if (item.project) {
+                                $('.result-search').append(`
+                                    <li class="hover-text-click" p-id="${item.project_id}" 
+                                        m-id="${item.member_id}"
+                                    >
+                                        ${item.project.name}
+                                    </li>
+                                `);
+                            }
                         });
                     } else {
                         $('.result-search').addClass('d-none');
@@ -188,32 +296,31 @@ $(document).ready(function () {
 
     // Click show suggestions content detail
     $(document).on('click', '.result-search li', function () {
-        let id1 = $(this).attr('data-id-1');
-        let id2 = $(this).attr('data-id-2');
+        let pId = $(this).attr('p-id');
+        let mId = $(this).attr('m-id');
+        let url = urlApiEdit + pId + '/' + mId;
+        let table = '';
         let content = $(this).text().trim();
         $('input[name=search]').val(content);
         $('.result-search').addClass('d-none');
-        let data = {
-            'project_id': id1,
-            'member_id': id2
-        };
-        showContentDetail(urlApiEdit, data);
+        showContentDetail(url, table);
     });
 
     // Click button search content
     $(document).on('click', '.btn-search', function (e) {
         e.preventDefault();
         let contentSearch = $('input[name=search]').val();
+        let table = '';
         $.get({
             url: urlApiSearch + contentSearch,
             dataType: "json",
             success: function (response) {
+                // console.log(response);
                 if (response.status == 200) {
-                    contentTableDetail(response.data);
+                    contentTableDetail(response.data, table);
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -254,8 +361,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -265,8 +371,7 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -274,15 +379,11 @@ $(document).ready(function () {
 
     // Edit content
     $(document).on('click', '.btn-edit', function () {
-        let id1 = $(this).attr('data-id-1');
-        let id2 = $(this).attr('data-id-2');
-        let data = {
-            'project_id': id1,
-            'member_id': id2
-        };
-        $.post({
-            url:urlApiEdit,
-            data: data,
+        let pId = $(this).closest('tr').attr('p-id');
+        let mId = $(this).closest('tr').attr('m-id');
+        let url = urlApiEdit + pId + '/' + mId;
+        $.get({
+            url:url,
             dataType: "json",
             success: function (response) {
                 if (response.status == 200) {
@@ -305,8 +406,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -334,8 +434,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -344,21 +443,18 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
     });
 
     // Click name content show detail
-    $(document).on('click', '.btn-show', function () {
-        let id1 = $(this).attr('data-id-1');
-        let id2 = $(this).attr('data-id-2');
-        let data = {
-            'project_id': id1,
-            'member_id': id2
-        };
-        showContentDetail(urlApiEdit, data);
+    $(document).on('click', '.table-name', function () {
+        let pId = $(this).closest('tr').attr('p-id');
+        let mId = $(this).closest('tr').attr('m-id');
+        let url = urlApiEdit + pId + '/' + mId;
+        let table = $(this).attr('name')
+        showContentDetail(url, table);
     });
 });

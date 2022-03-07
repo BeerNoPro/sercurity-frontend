@@ -28,5 +28,17 @@ $(document).ready(function () {
     // Show input datepicker 
     $( "#date-start" ).datepicker({ dateFormat: 'yy-mm-dd' });
     $( "#date-end" ).datepicker({ dateFormat: 'yy-mm-dd' });
+
+    // Function alert success notification
+    alertSuccess = function alertSuccess(data) {
+        alertify.set('notifier','position', 'top-right');
+        alertify.success(data);
+    }
+
+    // Function alert error notification
+    alertError = function alertError(data) {
+        alertify.set('notifier','position', 'top-right');
+        alertify.error(data);
+    }
     
 });

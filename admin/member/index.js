@@ -1,8 +1,12 @@
 $(document).ready(function () {
     // Link url request
-    var urlApiForeignKey = 'http://127.0.0.1:8000/api/admin/member-foreign/';
     var urlApi = 'http://127.0.0.1:8000/api/admin/member/';
+    var urlApiForeignKey = 'http://127.0.0.1:8000/api/admin/member-foreign/';
+    var urlApiEdit = 'http://127.0.0.1:8000/api/admin/member-edit/';
     var urlApiSearch = 'http://127.0.0.1:8000/api/admin/member-search/';
+
+    // Edit placeholder
+    $('input[name=search]').attr('placeholder', 'Search name member...');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -11,6 +15,7 @@ $(document).ready(function () {
             url: urlApi,
             dataType: "json",
             success: function (response) {
+                // console.log(response);
                 if (response.status == 200) {
                     // Handle content table
                     $('#error').addClass('d-none');
@@ -28,7 +33,9 @@ $(document).ready(function () {
                                 <td>${value.work_position}</td>
                                 <td>${value.date_join_company}</td>
                                 <td>${value.date_left_company}</td>
-                                <td>${value.company_name}</td>
+                                <td m-id="${value.id}" c-id="${value.company.id}" class="company hover-text-click">
+                                    ${value.company.name}
+                                </td>
                                 <td>
                                     <button type="submit" value="${value.id}" class="btn btn-warning btn-sm btn-edit">Edit</button>
                                 </td>
@@ -60,79 +67,110 @@ $(document).ready(function () {
     }
 
     // Function content table detail
-    function contentTableDetail(data) {
+    function contentTableDetail(data, table) {
         $('.table-show-detail').html('');
         $('#modalShowDetail').modal('show');
-        $.each(data, function (key, item) {
-            $('.table-show-detail').append(`
-                <tr>
-                    <th>Id:</th>
-                    <td>${item.id}</td>
-                </tr>
-                <tr>
-                    <th>Name:</th>
-                    <td>${item.name}</td>
-                </tr>
-                <tr>
-                    <th>Email:</th>
-                    <td>${item.email}</td>
-                </tr>
-                <tr>
-                    <th>Pass word:</th>
-                    <td>${item.passwork}</td>
-                </tr>
-                <tr>
-                    <th>Address:</th>
-                    <td>${item.address}</td>
-                </tr>
-                <tr>
-                    <th>Phone number:</th>
-                    <td>${item.phone_number}</td>
-                </tr>
-                <tr>
-                    <th>Work position:</th>
-                    <td>${item.work_position}</td>
-                </tr>
-                <tr>
-                    <th>Date join company:</th>
-                    <td>${item.date_join_company}</td>
-                </tr>
-                <tr>
-                    <th>Date left company:</th>
-                    <td>${item.date_left_company}</td>
-                </tr>
-                <tr>
-                    <th>Company id:</th>
-                    <td>${item.company_id}</td>
-                </tr>
-                <tr>
-                    <th>Company name:</th>
-                    <td>${item.company_name}</td>
-                </tr>
-                <tr>
-                    <th>Date created:</th>
-                    <td>${item.created_at}</td>
-                </tr>
-                <tr>
-                    <th>Date updated:</th>
-                    <td>${item.updated_at}</td>
-                </tr>
-            `);
-        });
+        if (table == 'company') {
+            $.each(data, function (key, item) {
+                $('.table-show-detail').append(`
+                    <tr>
+                        <th>Name:</th>
+                        <td>${item.company.name}</td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>${item.company.address}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>${item.company.email}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone:</th>
+                        <td>${item.company.phone}</td>
+                    </tr>
+                    <tr>
+                        <th>Date incorporation:</th>
+                        <td>${item.company.date_incorporation}</td>
+                    </tr>
+                    <tr>
+                        <th>Date created_at:</th>
+                        <td>${item.company.created_at}</td>
+                    </tr>
+                    <tr>
+                        <th>Date updated_at:</th>
+                        <td>${item.company.updated_at}</td>
+                    </tr>
+                `);
+            });
+        } else {
+            $.each(data, function (key, item) {
+                $('.table-show-detail').append(`
+                    <tr>
+                        <th>Id:</th>
+                        <td>${item.id}</td>
+                    </tr>
+                    <tr>
+                        <th>Name:</th>
+                        <td>${item.name}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>${item.email}</td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>${item.address}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone number:</th>
+                        <td>${item.phone_number}</td>
+                    </tr>
+                    <tr>
+                        <th>Work position:</th>
+                        <td>${item.work_position}</td>
+                    </tr>
+                    <tr>
+                        <th>Date join company:</th>
+                        <td>${item.date_join_company}</td>
+                    </tr>
+                    <tr>
+                        <th>Date left company:</th>
+                        <td>${item.date_left_company}</td>
+                    </tr>
+                    <tr>
+                        <th>Company id:</th>
+                        <td>${item.company.id}</td>
+                    </tr>
+                    <tr>
+                        <th>Company name:</th>
+                        <td>${item.company.name}</td>
+                    </tr>
+                    <tr>
+                        <th>Date created:</th>
+                        <td>${item.created_at}</td>
+                    </tr>
+                    <tr>
+                        <th>Date updated:</th>
+                        <td>${item.updated_at}</td>
+                    </tr>
+                `);
+            });
+        }
     }
 
     // Function show content detail
     function showContentDetail(urlApi, id) {
+        let table = 'member';
         $.get({
             url: urlApi + id,
             dataType: "json",
             success: function (response) {
                 if (response.status == 200) {
-                    contentTableDetail(response.data);
+                    contentTableDetail(response.data, table);
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -151,8 +189,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -160,7 +197,7 @@ $(document).ready(function () {
 
     // show list suggestions content
     $('input[name=search]').keyup(function () {
-        let nameSearch = $(this).val();
+        let nameSearch = $(this).val().replace(/ /g, "");
         if (nameSearch != '') {
             $.get({
                 url: urlApiSearch + nameSearch,
@@ -190,23 +227,23 @@ $(document).ready(function () {
         let content = $(this).text();
         $('input[name=search]').val(content);
         $('.result-search').addClass('d-none');
-        showContentDetail(urlApi, id);
+        showContentDetail(urlApiEdit, id);
     });
 
     // Click button search content
     $(document).on('click', '.btn-search', function (e) {
         e.preventDefault();
         let contentSearch = $('input[name=search]').val();
+        let table = 'member';
         $.get({
             url: urlApiSearch + contentSearch,
             dataType: "json",
             success: function (response) {
                 if (response.status == 200) {
-                    contentTableDetail(response.data);
+                    contentTableDetail(response.data, table);
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -244,8 +281,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -255,8 +291,7 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -266,7 +301,7 @@ $(document).ready(function () {
     $(document).on('click', '.btn-edit', function () {
         let id = $(this).val();
         $.get({
-            url: urlApi + id,
+            url: urlApiEdit + id,
             dataType: "json",
             success: function (response) {
                 if (response.status == 200) {
@@ -291,8 +326,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -317,8 +351,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -327,16 +360,36 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
     });
 
-    // Click name content show detail
+    // Click name member show content detail
     $(document).on('click', '.table-name', function () {
         let id = $(this).attr('data-id');
-        showContentDetail(urlApi, id);
+        showContentDetail(urlApiEdit, id);
     });
+
+    // Click name member show content detail
+    $(document).on('click', '.company', function () {
+        let companyId = $(this).attr('c-id');
+        let memberId = $(this).attr('m-id');
+        let table = 'company';
+        $.get({
+            url: urlApiEdit + memberId + '/' + companyId,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if (response.status == 200) {
+                    contentTableDetail(response.data, table);
+                } else {
+                    // Alert notification add fail
+                    alertError(response.message);
+                }
+            }
+        });
+    });
+
 });

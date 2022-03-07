@@ -2,6 +2,9 @@ $(document).ready(function () {
     // Link url request
     var urlApi = 'http://127.0.0.1:8000/api/admin/company/';
     var urlApiSearch = 'http://127.0.0.1:8000/api/admin/company-search/';
+
+    // Edit placeholder
+    $('input[name=search]').attr('placeholder', 'Search name company...');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -10,6 +13,7 @@ $(document).ready(function () {
             url: urlApi,
             dataType: "json",
             success: function (response) {
+                // console.log(response);
                 if (response.status == 200) {
                     // Handle content table
                     $('#error').addClass('d-none');
@@ -109,8 +113,7 @@ $(document).ready(function () {
                     `);
                 } else {
                     // alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -118,7 +121,7 @@ $(document).ready(function () {
 
     // show list suggestions content
     $('input[name=search]').keyup(function(){
-        let nameSearch = $(this).val();
+        let nameSearch = $(this).val().replace(/ /g, "");
         if (nameSearch != '') {
             $.get({
                 url: urlApiSearch + nameSearch,
@@ -200,8 +203,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -223,8 +225,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -234,8 +235,7 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -265,8 +265,7 @@ $(document).ready(function () {
                     $('input[name=date_incorporation]').val(response.data.date_incorporation);
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -289,8 +288,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -299,8 +297,7 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });

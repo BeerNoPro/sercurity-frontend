@@ -1,8 +1,12 @@
 $(document).ready(function () {
     // Link url request
-    var urlApiForeignKey = 'http://127.0.0.1:8000/api/admin/device-foreign/';
     var urlApi = 'http://127.0.0.1:8000/api/admin/device/';
+    var urlApiEdit = 'http://127.0.0.1:8000/api/admin/device-edit/';
+    var urlApiForeignKey = 'http://127.0.0.1:8000/api/admin/device-foreign/';
     var urlApiSearch = 'http://127.0.0.1:8000/api/admin/device-search/';
+
+    // Edit placeholder
+    $('input[name=search]').attr('placeholder', 'Search name member...');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -11,13 +15,14 @@ $(document).ready(function () {
             url: urlApi,
             dataType: "json",
             success: function (response) {
+                // console.log(response);
                 if (response.status == 200) {
                     // Handle content table
                     $('#error').addClass('d-none');
                     $('.table-show-lists').html('');
                     $.each(response.data.data, function (key, value) {
                         $('.table-show-lists').append(`
-                            <tr>
+                            <tr data-id="${value.id}">
                                 <th>${response.index++}</th>
                                 <td>${value.ip_address}</td>
                                 <td>${value.ip_mac}</td>
@@ -25,12 +30,18 @@ $(document).ready(function () {
                                 <td>${value.version_win}</td>
                                 <td>${value.version_virus}</td>
                                 <td>${value.update_win}</td>
-                                <td>${value.member_name}</td>
-                                <td>
-                                    <button type="submit" value="${value.id}" class="btn btn-warning btn-sm btn-edit">Edit</button>
+                                <td m-id="${value.member.id}" class="member hover-text-click">
+                                    ${value.member.name}
                                 </td>
                                 <td>
-                                    <button type="submit" value="${value.id}" class="btn btn-primary btn-sm btn-show">Show</button>
+                                    <button type="submit" class="btn btn-warning btn-sm btn-edit">
+                                        Edit
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary btn-sm btn-show">
+                                        Show
+                                    </button>
                                 </td>
                             </tr>
                         `);
@@ -60,71 +71,128 @@ $(document).ready(function () {
     }
 
     // Function content table detail
-    function contentTableDetail(data) {
+    function contentTableDetail(data, table) {
         $('.table-show-detail').html('');
         $('#modalShowDetail').modal('show');
-        $.each(data, function (key, item) {
-            $('.table-show-detail').append(`
-                <tr>
-                    <th>Id:</th>
-                    <td>${item.id}</td>
-                </tr>
-                <tr>
-                    <th>Ip address:</th>
-                    <td>${item.ip_address}</td>
-                </tr>
-                <tr>
-                    <th>Ip mac:</th>
-                    <td>${item.ip_mac}</td>
-                </tr>
-                <tr>
-                    <th>User login:</th>
-                    <td>${item.user_login}</td>
-                </tr>
-                <tr>
-                    <th>Version win:</th>
-                    <td>${item.version_win}</td>
-                </tr>
-                <tr>
-                    <th>Version virus:</th>
-                    <td>${item.version_virus}</td>
-                </tr>
-                <tr>
-                    <th>Update win:</th>
-                    <td>${item.update_win}</td>
-                </tr>
-                <tr>
-                    <th>Member id:</th>
-                    <td>${item.member_id}</td>
-                </tr>
-                <tr>
-                    <th>Member name:</th>
-                    <td>${item.member_name}</td>
-                </tr>
-                <tr>
-                    <th>Date created:</th>
-                    <td>${item.created_at}</td>
-                </tr>
-                <tr>
-                    <th>Date updated:</th>
-                    <td>${item.updated_at}</td>
-                </tr>
-            `);
-        });
+        if (table == 'member') {
+            $.each(data, function (key, item) {
+                if (item.member) {
+                    $('.table-show-detail').append(`
+                        <tr>
+                            <th>Member name:</th>
+                            <td>${item.member.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Member email:</th>
+                            <td>${item.member.email}</td>
+                        </tr>
+                        <tr>
+                            <th>Member address:</th>
+                            <td>${item.member.address}</td>
+                        </tr>
+                        <tr>
+                            <th>Member phone:</th>
+                            <td>${item.member.phone_number}</td>
+                        </tr>
+                        <tr>
+                            <th>Work position:</th>
+                            <td>${item.member.work_position}</td>
+                        </tr>
+                        <tr>
+                            <th>Company name:</th>
+                            <td>${item.member.company_name}</td>
+                        </tr>
+                        <tr>
+                            <th>Company address:</th>
+                            <td>${item.member.company_address}</td>
+                        </tr>
+                        <tr>
+                            <th>Company email:</th>
+                            <td>${item.member.company_email}</td>
+                        </tr>
+                        <tr>
+                            <th>Date join company:</th>
+                            <td>${item.member.date_join_company}</td>
+                        </tr>
+                        <tr>
+                            <th>Date left company:</th>
+                            <td>${item.member.date_left_company}</td>
+                        </tr>
+                        <tr>
+                            <th>Date created_at:</th>
+                            <td>${item.member.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Date updated_at:</th>
+                            <td>${item.member.updated_at}</td>
+                        </tr>
+                    `);
+                }
+            });
+        } else {
+            $.each(data, function (key, item) {
+                $('.table-show-detail').append(`
+                    <tr>
+                        <th>Id:</th>
+                        <td>${item.id}</td>
+                    </tr>
+                    <tr>
+                        <th>Ip address:</th>
+                        <td>${item.ip_address}</td>
+                    </tr>
+                    <tr>
+                        <th>Ip mac:</th>
+                        <td>${item.ip_mac}</td>
+                    </tr>
+                    <tr>
+                        <th>User login:</th>
+                        <td>${item.user_login}</td>
+                    </tr>
+                    <tr>
+                        <th>Version win:</th>
+                        <td>${item.version_win}</td>
+                    </tr>
+                    <tr>
+                        <th>Version virus:</th>
+                        <td>${item.version_virus}</td>
+                    </tr>
+                    <tr>
+                        <th>Update win:</th>
+                        <td>${item.update_win}</td>
+                    </tr>
+                    <tr>
+                        <th>Member id:</th>
+                        <td>${item.member.id}</td>
+                    </tr>
+                    <tr>
+                        <th>Member name:</th>
+                        <td>${item.member.name}</td>
+                    </tr>
+                    <tr>
+                        <th>Date created:</th>
+                        <td>${item.created_at}</td>
+                    </tr>
+                    <tr>
+                        <th>Date updated:</th>
+                        <td>${item.updated_at}</td>
+                    </tr>
+                `);
+            });
+        }
     }
 
     // Function show content detail
-    function showContentDetail(urlApi, id) {
+    function showContentDetail(url, table) {
         $.get({
-            url: urlApi + id,
+            url: url,
             dataType: "json",
             success: function (response) {
+                // console.log(response);
                 if (response.status == 200) {
-                    contentTableDetail(response.data);
+                    contentTableDetail(response.data, table);
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -144,8 +212,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -153,19 +220,22 @@ $(document).ready(function () {
 
     // show list suggestions content
     $('input[name=search]').keyup(function () {
-        let nameSearch = $(this).val();
+        let nameSearch = $(this).val().replace(/ /g, "");
         if (nameSearch != '') {
             $.get({
                 url: urlApiSearch + nameSearch,
                 dataType: 'json',
                 success: function (response) {
+                    // console.log(response);
                     if (response.status == 200) {
                         $('.result-search').removeClass('d-none');
                         $('.result-search').html('');
                         $.each(response.data, function (key, item) {
-                            $('.result-search').append(`
-                                <li class="hover-text-click" data-id="${item.id}" >${item.user_login}</li>
-                            `);
+                            if (item.member) {
+                                $('.result-search').append(`
+                                    <li class="hover-text-click" data-id="${item.id}" >${item.member.name}</li>
+                                `);
+                            }
                         });
                     } else {
                         $('.result-search').addClass('d-none');
@@ -183,7 +253,7 @@ $(document).ready(function () {
         let content = $(this).text();
         $('input[name=search]').val(content);
         $('.result-search').addClass('d-none');
-        showContentDetail(urlApi, id);
+        showContentDetail(urlApiEdit + id, table = 'member');
     });
 
     // Click button search content
@@ -194,13 +264,12 @@ $(document).ready(function () {
             url: urlApiSearch + contentSearch,
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
-                    contentTableDetail(response.data);
+                    contentTableDetail(response.data, table = 'member');
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -238,8 +307,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -249,8 +317,7 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -258,9 +325,9 @@ $(document).ready(function () {
 
     // Edit content
     $(document).on('click', '.btn-edit', function () {
-        let id = $(this).val();
+        let id = $(this).closest('tr').attr('data-id');
         $.get({
-            url: urlApi + id,
+            url: urlApiEdit + id,
             dataType: "json",
             success: function (response) {
                 if (response.status == 200) {
@@ -284,8 +351,7 @@ $(document).ready(function () {
                     });
                 } else {
                     // Alert notification add fail
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -310,8 +376,7 @@ $(document).ready(function () {
                     });
                 } else if (response.status == 200) {
                     // Alert notification add success
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.success(response.message);
+                    alertSuccess(response.message);
                     // Reset form and hide modal
                     $('#save_error_list').addClass('d-none');
                     $('#modalContents').find('input').val('');
@@ -320,16 +385,24 @@ $(document).ready(function () {
                     fetchApi(urlApi);
                 } else if (response.status == 404) {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
     });
 
-    // Click name content show detail
+    // Click button show content detail
     $(document).on('click', '.btn-show', function () {
-        let id = $(this).val();
-        showContentDetail(urlApi, id);
+        let id = $(this).closest('tr').attr('data-id');
+        let url = urlApiEdit + id;
+        showContentDetail(url, table = '');
+    });
+
+    // Click name member show content detail
+    $(document).on('click', '.member', function () {
+        let id = $(this).closest('tr').attr('data-id');
+        let mId = $(this).attr('m-id');
+        let url = urlApiEdit + id + '/' + mId;
+        showContentDetail(url, table = 'member');
     });
 });
