@@ -363,9 +363,16 @@ $(document).ready(function () {
             url: urlApiSearch + contentSearch,
             dataType: "json",
             success: function (response) {
-                // console.log(response.data);
+                // console.log(response);
                 if (response.status == 200) {
-                    // contentTableDetail(response.data, table = 'member');
+                    $.each(response.data, function (key, item) { 
+                        if (item.training) {
+                            // console.log(item);
+                            var id = item.training.trainer;
+                            var url = urlApiShowMember + id;
+                            showContentDetail(url, table = 'member');
+                        }
+                    });
                 } else {
                     // Alert notification add fail
                     alertError(response.message);
