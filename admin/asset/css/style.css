@@ -4,16 +4,39 @@
     color: blue;
     text-decoration: underline;
     cursor: pointer;
+    background-color: #ccc;
+}
+
+.sidebar-color {
+    background-color: white;
+    border-radius: 6px;
+}
+
+table .btn-edit:hover {
+    background-color: yellow;
+}
+
+table .btn-show:hover {
+    background-color: blue;
+}
+
+table .btn-show:hover i {
+    color: white;
+}
+
+table .text-center:hover {
+    background-color: #ccc;
 }
 /* End common */
 
 /* Start header */
 .header-content {
-    height: 8vh;
+    height: 9.5vh;
 }
 
 .nav-item:hover {
     background-color: #ccc;
+    border-radius: 6px;
 }
 
 .btn-search-box:hover {
@@ -43,13 +66,15 @@
 }
 /* End header */
 
+/* Start sidebar */
+.sidebar-color a {
+    color: black;
+}
+/* End sidebar */
+
 /* Start content */
 .row-content {
-    height: 92vh;
-}
-
-.table-name:hover {
-    background-color: #ccc;
+    height: 90.5vh;
 }
 
 .table-show-detail-hr {
@@ -74,4 +99,14 @@
     position: absolute;
     top: -30px;
     right: 22px;
+}
+
+@media only screen and (min-height: 1024px) {
+    .header-content {
+        height: 7.4vh;
+    }
+
+    .row-content {
+        height: 92.6vh;
+    }
 }

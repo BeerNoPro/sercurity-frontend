@@ -21,16 +21,14 @@
         <table class="table table-bordered table-responsive">
             <thead>
                 <tr>
-                    <th scope="col">Stt</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Phone number</th>
-                    <th scope="col">Work position</th>
-                    <th scope="col">Date join company</th>
-                    <th scope="col">Date left company</th>
-                    <th scope="col">Name company</th>
-                    <th scope="col">Action</th>
+                    <th>Stt</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Work position</th>
+                    <th>Date join company</th>
+                    <th>Name company</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>
@@ -46,7 +44,7 @@
                     <div class="modal-body">
                         <form action="" method="post" id="form">
                             <ul class="alert alert-warning d-none" id="save_error_list"></ul>
-                            <input type="hidden" value="" name="input_id">
+                            <input type="hidden" value="" name="id">
                             <div class="form-group mt-3">
                                 <label for="" class="form-label">Name:</label>
                                 <input type="text" class="form-control" name="name" placeholder="Name...">

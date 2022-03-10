@@ -7,6 +7,9 @@ $(document).ready(function () {
 
     // Edit placeholder
     $('input[name=search]').attr('placeholder', 'Search name member...');
+
+    // Add background color sidebar 
+    $('.member').addClass('sidebar-color');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -28,16 +31,16 @@ $(document).ready(function () {
                                     ${value.name}
                                 </td>
                                 <td>${value.email}</td>
-                                <td>${value.address}</td>
                                 <td>${value.phone_number}</td>
                                 <td>${value.work_position}</td>
                                 <td>${value.date_join_company}</td>
-                                <td>${value.date_left_company}</td>
                                 <td m-id="${value.id}" c-id="${value.company.id}" class="company hover-text-click">
                                     ${value.company.name}
                                 </td>
-                                <td>
-                                    <button type="submit" value="${value.id}" class="btn btn-warning btn-sm btn-edit">Edit</button>
+                                <td class="text-center">
+                                    <button type="submit" value="${value.id}" class="btn btn-sm btn-edit">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
                                 </td>
                             </tr>
                         `);
@@ -182,6 +185,7 @@ $(document).ready(function () {
             url: url,
             dataType: "json",
             success: function (response) {
+                // console.log(response);
                 $('#select-1').html('')
                 if (response.status == 200) {
                     $.each(response.data, function (key, item) { 
@@ -273,13 +277,11 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+            headers: {
+                'Accept': 'application/json',
+            },
             success: function (response) {
-                if (response.status == 400) {
-                    $('#save_error_list').removeClass('d-none');
-                    $.each(response.error, function (indexInArray, valueOfElement) { 
-                        $('#save_error_list').append('<li>' + valueOfElement + '</li>');
-                    });
-                } else if (response.status == 200) {
+                if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);
                     // Reset form and hide modal
@@ -293,6 +295,12 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                // console.log(error);
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });
@@ -314,7 +322,7 @@ $(document).ready(function () {
                     $('.btn-handel').addClass('btn-primary btn-update');
                     // Add response value in form input edit
                     $.each(response.data, function (key, item) {
-                        $('input[name=input_id]').val(item.id);
+                        $('input[name=id]').val(item.id);
                         $('input[name=name]').val(item.name);
                         $('input[name=email]').val(item.email);
                         $('input[name=address]').val(item.address);
@@ -334,7 +342,7 @@ $(document).ready(function () {
 
     // Update content
     $(document).on('click', '.btn-update', function () {
-        let id = $('input[name=input_id]').val();
+        let id = $('input[name=id]').val();
         let companyId = $('#select-1').val();
         let formData = new FormData($('#form')[0]);
         formData.append('company_id', companyId)
@@ -343,13 +351,11 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+            headers: {
+                'Accept': 'application/json',
+            },
             success: function (response) {
-                if (response.status == 400) {
-                    $('#save_error_list').removeClass('d-none');
-                    $.each(response.error, function (indexInArray, valueOfElement) { 
-                        $('#save_error_list').append('<li>' + valueOfElement + '</li>');
-                    });
-                } else if (response.status == 200) {
+                if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);
                     // Reset form and hide modal
@@ -362,6 +368,12 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                // console.log(error);
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });

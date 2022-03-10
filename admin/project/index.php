@@ -27,7 +27,7 @@
                     <th scope="col">Time completed</th>
                     <th scope="col">Company name</th>
                     <th scope="col">Work room name</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>

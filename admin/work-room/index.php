@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="row-top mt-3 mb-3 d-flex justify-content-between align-items-center">
-            <h1 class="">Lists content members</h1>
+            <h1 class="">Lists content work rooms</h1>
             <a href="#" class="btn btn-success show-modal" data-bs-toggle="modal" data-bs-target="#modalContents">
                 Add new data
             </a>
@@ -22,7 +22,7 @@
                     <th scope="col">Stt</th>
                     <th scope="col">Name</th>
                     <th scope="col">Location</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>
@@ -38,7 +38,7 @@
                     <div class="modal-body">
                         <form action="" method="post" id="form">
                             <ul class="alert alert-warning d-none" id="save_error_list"></ul>
-                            <input type="hidden" value="" name="input_id">
+                            <input type="hidden" value="" name="id">
                             <div class="form-group mt-3">
                                 <label for="" class="form-label">Name:</label>
                                 <input type="text" class="form-control" name="name" placeholder="Name...">

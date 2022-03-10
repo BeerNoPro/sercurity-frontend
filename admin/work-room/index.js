@@ -5,6 +5,9 @@ $(document).ready(function () {
 
     // Edit placeholder
     $('input[name=search]').attr('placeholder', 'Search name work room...');
+
+    // Add background color sidebar 
+    $('.work-room').addClass('sidebar-color');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -25,8 +28,10 @@ $(document).ready(function () {
                                     ${value.name}
                                 </td>
                                 <td>${value.location}</td>
-                                <td>
-                                    <button type="submit" value="${value.id}" class="btn btn-warning btn-sm btn-edit">Edit</button>
+                                <td class="text-center">
+                                    <button type="submit" value="${value.id}" class="btn btn-sm btn-edit">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
                                 </td>
                             </tr>
                         `);
@@ -189,13 +194,11 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+            headers: {
+                'Accept': 'application/json',
+            },
             success: function (response) {
-                if (response.status == 400) {
-                    $('#save_error_list').removeClass('d-none');
-                    $.each(response.error, function (indexInArray, valueOfElement) { 
-                        $('#save_error_list').append('<li>' + valueOfElement + '</li>');
-                    });
-                } else if (response.status == 200) {
+                if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);
                     // Reset form and hide modal
@@ -209,6 +212,12 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                // console.log(error);
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });
@@ -230,7 +239,7 @@ $(document).ready(function () {
                     $('.btn-handel').removeClass('btn-success btn-add');
                     $('.btn-handel').addClass('btn-primary btn-update');
                     // Add response value in form input edit
-                    $('input[name=input_id]').val(response.data.id);
+                    $('input[name=id]').val(response.data.id);
                     $('input[name=name]').val(response.data.name);
                     $('input[name=location]').val(response.data.location);
                 } else {
@@ -243,20 +252,18 @@ $(document).ready(function () {
 
     // Update content
     $(document).on('click', '.btn-update', function () {
-        let id = $('input[name=input_id]').val();
+        let id = $('input[name=id]').val();
         let formData = new FormData($('#form')[0]);
         $.post({
             url: urlApi + id,
             data: formData,
             contentType: false,
             processData: false,
+            headers: {
+                'Accept': 'application/json',
+            },
             success: function (response) {
-                if (response.status == 400) {
-                    $('#save_error_list').removeClass('d-none');
-                    $.each(response.error, function (indexInArray, valueOfElement) { 
-                        $('#save_error_list').append('<li>' + valueOfElement + '</li>');
-                    });
-                } else if (response.status == 200) {
+                if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);
                     // Reset form and hide modal
@@ -269,6 +276,12 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                // console.log(error);
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });

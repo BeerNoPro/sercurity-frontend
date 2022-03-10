@@ -12,6 +12,9 @@ $(document).ready(function () {
 
     // Edit placeholder
     $('input[name=search]').attr('placeholder', 'Search name trainer...');
+
+    // Add background color sidebar 
+    $('.training').addClass('sidebar-color');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -36,8 +39,10 @@ $(document).ready(function () {
                                 <td p-id="${value.project_id}" class="project hover-text-click">
                                     ${value.project.name}
                                 </td>
-                                <td>
-                                    <button type="submit" value="${value.id}" class="btn btn-warning btn-sm btn-edit">Edit</button>
+                                <td class="text-center">
+                                    <button type="submit" value="${value.id}" class="btn btn-sm btn-edit">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
                                 </td>
                             </tr>
                         `);

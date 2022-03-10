@@ -25,7 +25,7 @@
                     <th scope="col">Cabinet name</th>
                     <th scope="col">Work room name</th>
                     <th scope="col">Member name</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>

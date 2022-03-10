@@ -12,6 +12,9 @@ $(document).ready(function () {
 
     // Edit placeholder
     $('input[name=search]').attr('placeholder', 'Search name cabinet...');
+
+    // Add background color sidebar 
+    $('.cabinet').addClass('sidebar-color');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -38,8 +41,10 @@ $(document).ready(function () {
                                 <td m-id="${value.member_id}" class="member hover-text-click">
                                     ${value.member.name}
                                 </td>
-                                <td>
-                                    <button type="submit" class="btn btn-warning btn-sm btn-edit">Edit</button>
+                                <td class="text-center">
+                                    <button type="submit" class="btn btn-sm btn-edit">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
                                 </td>
                             </tr>
                         `);

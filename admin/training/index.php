@@ -25,7 +25,7 @@
                     <th scope="col">Name trainer</th>
                     <th scope="col">Content</th>
                     <th scope="col">Name project</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>

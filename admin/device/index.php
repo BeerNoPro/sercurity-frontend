@@ -29,7 +29,7 @@
                     <th scope="col">Version virus</th>
                     <th scope="col">Date update win</th>
                     <th scope="col">Member name</th>
-                    <th colspan="2">Action</th>
+                    <th colspan="2" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>

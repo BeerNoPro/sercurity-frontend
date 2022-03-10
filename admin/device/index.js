@@ -7,6 +7,9 @@ $(document).ready(function () {
 
     // Edit placeholder
     $('input[name=search]').attr('placeholder', 'Search name member...');
+
+    // Add background color sidebar 
+    $('.device').addClass('sidebar-color');
    
     // Get show list contents
     fetchApi(urlApi)
@@ -33,14 +36,14 @@ $(document).ready(function () {
                                 <td m-id="${value.member.id}" class="member hover-text-click">
                                     ${value.member.name}
                                 </td>
-                                <td>
-                                    <button type="submit" class="btn btn-warning btn-sm btn-edit">
-                                        Edit
+                                <td class="text-center">
+                                    <button type="submit" class="btn btn-sm btn-edit">
+                                        <i class="fa-solid fa-pen"></i>
                                     </button>
                                 </td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary btn-sm btn-show">
-                                        Show
+                                <td class="text-center">
+                                    <button type="submit" class="btn btn-sm btn-show">
+                                        <i class="fa-solid fa-folder-open"></i>
                                     </button>
                                 </td>
                             </tr>

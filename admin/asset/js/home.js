@@ -1,8 +1,16 @@
 $(document).ready(function () {
     // Link url api
     var urlApi = 'http://127.0.0.1:8000/api/view/home/';
-    var urlApiCompanyWorkRoom = 'http://127.0.0.1:8000/api/view/company-workroom/';
     var urlApiMember = 'http://127.0.0.1:8000/api/view/member/';
+    var urlApiSearch = 'http://127.0.0.1:8000/api/view/search/';
+    var urlApiCompanyWorkRoom = 'http://127.0.0.1:8000/api/view/company-workroom/';
+
+    
+    // Edit placeholder input search
+    $('input[name=search]').attr('placeholder', 'Search name company...');
+
+    // Add background color sidebar 
+    $('.home').addClass('sidebar-color');
 
     // Get list content
     getContent(urlApi)
@@ -50,8 +58,7 @@ $(document).ready(function () {
                     }
                 } else {
                     // Alert notification error
-                    alertify.set('notifier','position', 'top-right');
-                    alertify.error(response.message);
+                    alertError(response.message);
                 }
             }
         });
@@ -213,52 +220,101 @@ $(document).ready(function () {
         }
     }
 
+    // Function show content detail
+    function showContentDetail(url, table) {
+        $.get({
+            url: url,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.status == 200) {
+                    contentTableDetail(response.data, table);
+                } else {
+                    // Alert notification add fail
+                    alertError(response.message);
+                }
+            }
+        });
+    }
+
+    // show list suggestions content
+    $('input[name=search]').keyup(function () {
+        let nameSearch = $(this).val().replace(/ /g, "");
+        if (nameSearch != '') {
+            $.get({
+                url: urlApiSearch + nameSearch,
+                dataType: 'json',
+                success: function (response) {
+                    // console.log(response.data);
+                    if (response.status == 200) {
+                        $('.result-search').removeClass('d-none');
+                        $('.result-search').html('');
+                        $.each(response.data, function (key, item) {
+                            // console.log(item);
+                            $('.result-search').append(`
+                                <li class="hover-text-click" data-id="${item.id}" >${item.company.name}</li>
+                            `);
+                        });
+                    } else {
+                        $('.result-search').addClass('d-none');
+                    }
+                }
+            });
+        } else {
+            $('.result-search').addClass('d-none');
+        }
+    }); 
+
+    // Click show suggestions content detail
+    $(document).on('click', '.result-search li', function () {
+        let id = $(this).attr('data-id');
+        let content = $(this).text();
+        $('input[name=search]').val(content);
+        $('.result-search').addClass('d-none');
+        let url = urlApiEdit + id;
+        // showContentDetail(url, table = 'cabinet');
+    });
+
+    // Click button search content
+    $(document).on('click', '.btn-search', function (e) {
+        e.preventDefault();
+        let contentSearch = $('input[name=search]').val();
+        $.get({
+            url: urlApiSearch + contentSearch,
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 200) {
+                    contentTableDetail(response.data, table = 'cabinet');
+                } else {
+                    // Alert notification add fail
+                    alertError(response.message);
+                }
+            }
+        });
+    });
+
     // Click show content detail company and worm room
     $(document).on('click', '.tb-item', function () {
         let id = $(this).attr('data-id');
         let table = $(this).attr('data-tb');
-        $.get({
-            url: urlApiCompanyWorkRoom + table + '/' + id,
-            dataType: "json",
-            success: function (response) {
-                // console.log(response);
-                if (response.status == 200) {
-                    contentTableDetail(response.data, response.table)
-                }
-            }
-        });
+        let url = urlApiCompanyWorkRoom + table + '/' + id;
+        showContentDetail(url, table);
     });
 
     // Click show content detail project
     $(document).on('click', '.tb-project', function () {
         let id = $(this).attr('data-id');
         let table = 'project';
-        $.get({
-            url: urlApi + id,
-            dataType: "json",
-            success: function (response) {
-                // console.log(response);
-                if (response.status == 200) {
-                    contentTableDetail(response.data, table)
-                }
-            }
-        });
+        let url = urlApi + id;
+        showContentDetail(url, table);
     });
 
     // Click show content detail member
     $(document).on('click', '.tb-member', function () {
         let id = $(this).attr('data-id');
         let table = 'member';
-        $.get({
-            url: urlApiMember + id,
-            dataType: "json",
-            success: function (response) {
-                // console.log(response);
-                if (response.status == 200) {
-                    contentTableDetail(response.data, table)
-                }
-            }
-        });
+        let url = urlApiMember + id;
+        showContentDetail(url, table);
     });
 
     // Click pages pagination

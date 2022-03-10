@@ -30,7 +30,7 @@
                     <th scope="col">Time completed</th>
                     <th scope="col">Result</th>
                     <th scope="col">Note</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="table-show-lists"></tbody>
