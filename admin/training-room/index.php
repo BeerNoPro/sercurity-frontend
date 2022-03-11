@@ -46,8 +46,8 @@
                     <div class="modal-body">
                         <form action="" method="post" id="form">
                             <ul class="alert alert-warning d-none" id="save_error_list"></ul>
-                            <input type="hidden" value="" name="input_id_1">
-                            <input type="hidden" value="" name="input_id_2">
+                            <input type="hidden" value="" name="training_id">
+                            <input type="hidden" value="" name="member_id">
                             <div class="form-group mt-3 box-select">
                                 <label for="" class="form-label">Name trainer:</label>
                                 <select id="select-1" class="form-select"></select>
@@ -66,12 +66,10 @@
                             </div>
                             <div class="form-group mt-3">
                                 <label for="" class="form-label">Result:</label>
-                                <!-- <input type="text" class="form-control" name="result" placeholder="Result..."> -->
                                 <textarea class="form-control" name="result" id="" rows="2"></textarea>
                             </div>
                             <div class="form-group mt-3">
                                 <label for="" class="form-label">Note:</label>
-                                <!-- <input type="text" class="form-control" name="note" placeholder="Note..."> -->
                                 <textarea class="form-control" name="note" id="" rows="3"></textarea>
                             </div>
                         </form>

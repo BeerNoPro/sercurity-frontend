@@ -43,8 +43,8 @@
                     <div class="modal-body">
                         <form action="" method="post" id="form">
                             <ul class="alert alert-warning d-none" id="save_error_list"></ul>
-                            <input type="hidden" value="" name="input_id_1">
-                            <input type="hidden" value="" name="input_id_2">
+                            <input type="hidden" value="" name="project_id">
+                            <input type="hidden" value="" name="member_id">
                             <div class="form-group mt-3 box-select">
                                 <label for="" class="form-label">Name project:</label>
                                 <select id="select-1" class="form-select"></select>

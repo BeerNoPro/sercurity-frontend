@@ -312,13 +312,11 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+            headers: {
+                'Accept': 'application/json',
+            },
             success: function (response) {
-                if (response.status == 400) {
-                    $('#save_error_list').removeClass('d-none');
-                    $.each(response.error, function (indexInArray, valueOfElement) { 
-                        $('#save_error_list').append('<li>' + valueOfElement + '</li>');
-                    });
-                } else if (response.status == 200) {
+                if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);
                     // Reset form and hide modal
@@ -332,6 +330,12 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                // console.log(error);
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });
@@ -353,7 +357,7 @@ $(document).ready(function () {
                     $('.btn-handel').addClass('btn-primary btn-update');
                     // Add response value in form input edit
                     $.each(response.data, function (key, item) {
-                        $('input[name=input_id]').val(item.id);
+                        $('input[name=id]').val(item.id);
                         $('input[name=name]').val(item.name);
                         $('input[name=time_start]').val(item.time_start);
                         $('input[name=time_completed]').val(item.time_completed);
@@ -370,7 +374,7 @@ $(document).ready(function () {
 
     // Update content
     $(document).on('click', '.btn-update', function () {
-        let id = $('input[name=input_id]').val();
+        let id = $('input[name=id]').val();
         let companyId = $('#select-1').val();
         let workRoomId = $('#select-2').val();
         let formData = new FormData($('#form')[0]);
@@ -381,13 +385,11 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+            headers: {
+                'Accept': 'application/json',
+            },
             success: function (response) {
-                if (response.status == 400) {
-                    $('#save_error_list').removeClass('d-none');
-                    $.each(response.error, function (indexInArray, valueOfElement) { 
-                        $('#save_error_list').append('<li>' + valueOfElement + '</li>');
-                    });
-                } else if (response.status == 200) {
+                if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);
                     // Reset form and hide modal
@@ -400,6 +402,12 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                // console.log(error);
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });

@@ -266,6 +266,7 @@ $(document).ready(function () {
             url: url + name,
             dataType: "json",
             success: function (response) {
+                // console.log(response);
                 $(select).html('')
                 if (response.status == 200) {
                     $.each(response.data, function (key, item) {
@@ -407,14 +408,12 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+            headers: {
+                'Accept': 'application/json',
+            },
             success: function (response) {
-                console.log(response);
-                if (response.status == 400) {
-                    $('#save_error_list').removeClass('d-none');
-                    $.each(response.error, function (indexInArray, valueOfElement) { 
-                        $('#save_error_list').append('<li>' + valueOfElement + '</li>');
-                    });
-                } else if (response.status == 200) {
+                // console.log(response);
+                if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);
                     // Reset form and hide modal
@@ -428,6 +427,12 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                // console.log(error);
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });
@@ -451,8 +456,8 @@ $(document).ready(function () {
                     $('.btn-handel').addClass('btn-primary btn-update');
                     // Add response value in form input edit
                     $.each(response.data, function (key, item) {
-                        $('input[name=input_id_1]').val(item.training_id);
-                        $('input[name=input_id_2]').val(item.member_id);
+                        $('input[name=training_id]').val(item.training_id);
+                        $('input[name=member_id]').val(item.member_id);
                         $('input[name=date_start]').val(item.date_start);
                         $('input[name=date_completed]').val(item.date_completed);
                         $('textarea[name=result]').val(item.result);
@@ -470,8 +475,8 @@ $(document).ready(function () {
 
     // Update content
     $(document).on('click', '.btn-update', function () {
-        let id1 = $('input[name=input_id_1]').val();
-        let id2 = $('input[name=input_id_2]').val();
+        let id1 = $('input[name=training_id]').val();
+        let id2 = $('input[name=member_id]').val();
         let id1New = $('#select-1').val();
         let id2New = $('#select-2').val();
         let formData = new FormData($('#form')[0]);
@@ -482,14 +487,12 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+            headers: {
+                'Accept': 'application/json',
+            },
             success: function (response) {
                 // console.log(response);
-                if (response.status == 400) {
-                    $('#save_error_list').removeClass('d-none');
-                    $.each(response.error, function (indexInArray, valueOfElement) { 
-                        $('#save_error_list').append('<li>' + valueOfElement + '</li>');
-                    });
-                } else if (response.status == 200) {
+                if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);
                     // Reset form and hide modal
@@ -502,6 +505,12 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                // console.log(error);
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });

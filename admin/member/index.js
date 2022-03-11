@@ -181,8 +181,9 @@ $(document).ready(function () {
 
     // Function show select option
     function selectOption(url) {
+        let table = 'company';
         $.get({
-            url: url,
+            url: url + table,
             dataType: "json",
             success: function (response) {
                 // console.log(response);

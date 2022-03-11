@@ -45,7 +45,7 @@
                     <div class="modal-body">
                         <form action="" method="post" id="form">
                             <ul class="alert alert-warning d-none" id="save_error_list"></ul>
-                            <input type="hidden" value="" name="input_id">
+                            <input type="hidden" value="" name="id">
                             <div class="form-group mt-3">
                                 <label for="" class="form-label">Ip address:</label>
                                 <input type="text" class="form-control" name="ip_address" placeholder="Aa...">
