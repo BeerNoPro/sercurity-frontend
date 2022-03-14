@@ -47,7 +47,7 @@ require_once('./layout/header.php');
                     </table>
                 </div>
             </div>
-            <div class="card mb-2">
+            <div class="card mb-2 card-project">
                 <div class="card-header text-center">
                     <h6 class="fw-bold">Project details</h6>
                 </div>
@@ -61,18 +61,11 @@ require_once('./layout/header.php');
                                 <th>Time completed</th>
                             </tr>
                         </thead>
-                        <tbody class="tbody-project">
-                            <tr>
-                                <td>1</td>
-                                <td class="hover-text-click">Security project</td>
-                                <td>2022-02-10</td>
-                                <td>2022-06-10</td>
-                            </tr>
-                        </tbody>
+                        <tbody class="tbody-project"></tbody>
                     </table>
                 </div>
             </div>
-            <div class="card mb-2">
+            <div class="card mb-2 card-member">
                 <div class="card-header text-center">
                     <h6 class="fw-bold">Members</h6>
                 </div>
@@ -85,18 +78,7 @@ require_once('./layout/header.php');
                                 <th>Name company</th>
                             </tr>
                         </thead>
-                        <tbody class="tbody-member">
-                            <tr>
-                                <td>1</td>
-                                <td class="hover-text-click">Pham Viet Hung</td>
-                                <td class="hover-text-click">FPT company</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td class="hover-text-click">Cao Tuan Anh</td>
-                                <td class="hover-text-click">Software company</td>
-                            </tr>
-                        </tbody>
+                        <tbody class="tbody-member"></tbody>
                     </table>
                 </div>
             </div>

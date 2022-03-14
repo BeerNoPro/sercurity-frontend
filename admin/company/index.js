@@ -312,11 +312,10 @@ $(document).ready(function () {
                     alertError(response.message);
                 }
             }, error: function(error) {
-                console.log(error);
-                // $('#save_error_list').removeClass('d-none');
-                // $.each(error.responseJSON.errors, function (key, value) { 
-                //     $('#save_error_list').append('<li>' + value + '</li>');
-                // });
+                $('#save_error_list').removeClass('d-none');
+                $.each(error.responseJSON.errors, function (key, value) { 
+                    $('#save_error_list').append('<li>' + value + '</li>');
+                });
             }
         });
     });
