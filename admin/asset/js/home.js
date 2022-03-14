@@ -12,6 +12,10 @@ $(document).ready(function () {
     // Add background color sidebar 
     $('.home').addClass('sidebar-color');
 
+    // Get new date today
+    var d = new Date();
+    var strDate = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+
     // Get list content
     getContent(urlApi)
     function getContent(url) {
@@ -19,47 +23,84 @@ $(document).ready(function () {
             url: url,
             dataType: "json",
             success: function (response) {
-                // console.log(response.data.data);
+                // console.log(response);
                 if (response.status == 200) {
-                    $('.tbody-primary').html('');
-                    // Render content html
-                    $.each(response.data.data, function (key, el) {
-                        $.each(el.member, function (key, member) {
-                            $('.tbody-primary').append(`
+                    console.log(response.data);
+                    // Render first value work room in array
+                    $('.box-body-wr, .project-done, .project-doing, .tbody-work-room, .tbody-project').html('');
+                    $.each(response.data, function (key, valWorkRoom) {
+                        if (key == 0) {
+                            // Render project
+                            $index = 1;
+                            $.each(valWorkRoom.project, function (keyProject, valProject) {
+                                if (new Date(valProject.time_completed) <= new Date(strDate)) {
+                                    // Render project done
+                                    $('.project-done').append(`
+                                        <div class="btn-project mb-2 p-1 fs-14 
+                                            hover border rounded-3"
+                                        >
+                                            ${valProject.name}
+                                        </div>
+                                    `);
+                                } else {
+                                    // Render project doing
+                                    if (keyProject == 0) {
+                                        // Add color in first item
+                                        $('.project-doing').append(`
+                                            <div class="btn-project mb-2 p-1 fs-14 
+                                                hover border rounded-3 btn-primary"
+                                            >
+                                                ${valProject.name}
+                                            </div>
+                                        `);
+                                    } else {
+                                        $('.project-doing').append(`
+                                            <div class="btn-project mb-2 p-1 fs-14 
+                                                hover border rounded-3"
+                                            >
+                                                ${valProject.name}
+                                            </div>
+                                        `);
+                                    }
+                                }
+                                // Render project details
+                                $('.tbody-project').append(`
+                                    <tr>
+                                        <td>${$index++}</td>
+                                        <td class="hover-text-click">${valProject.name}</td>
+                                        <td>${valProject.time_start}</td>
+                                        <td>${valProject.time_completed}</td>
+                                    </tr>
+                                `);
+                            });
+                            // Add color in first item work room
+                            $('.box-body-wr').append(`
+                                <div class="btn-work-room mb-2 p-1 fs-14 border btn-primary rounded-3">
+                                    ${valWorkRoom.name}
+                                </div>
+                            `);
+                            // Render work room detail
+                            $('.tbody-work-room').append(`
                                 <tr>
-                                    <td>${response.index++}</td>
-                                    <td class="tb-item" data-tb="company" data-id="${el.company.id}">
-                                        ${el.company.name}
-                                    </td>
-                                    <td class="tb-item" data-tb="work_room" data-id="${el.work_room.id}">
-                                        ${el.work_room.name}
-                                    </td>
-                                    <td class="tb-project" data-id="${el.id}">${el.name}</td>
-                                    <td class="tb-member" data-id="${member.id}">${member.name}</td>
+                                    <td>1</td>
+                                    <td class="hover-text-click">${valWorkRoom.name}</td>
+                                    <td>${valWorkRoom.location}</td>
                                 </tr>
                             `);
-                        });
-                    });
-                    // Render pagination
-                    if (response.data.last_page > 1) {
-                        $('#show-pagination').removeClass('d-none');
-                        $('#show-pagination ul').html('');
-                        $.each(response.data.links, function (key, link) {
-                            link.active ? active = 'active' : active = '';
-                            link.url == null ? disabled = 'disabled' : disabled = '';
-                            $('#show-pagination ul').append(`
-                                <li class="page-item ${active}${disabled}">
-                                    <a class="page-link" href="${link.url}">${link.label}</a>
-                                </li>
+                        } else {
+                            $('.box-body-wr').append(`
+                                <div class="btn-work-room mb-2 p-1 fs-14 border rounded-3">
+                                    ${valWorkRoom.name}
+                                </div>
                             `);
-                        });
-                    } else {
-                        $('#show-pagination').addClass('d-none');
-                    }
+                        }
+                    });
                 } else {
                     // Alert notification error
                     alertError(response.message);
                 }
+            }, error: function(error) {
+                console.log(error);
             }
         });
     }

@@ -1,5 +1,4 @@
 /* Start common */
-.tbody-primary td:hover,
 .hover-text-click:hover {
     color: blue;
     text-decoration: underline;
@@ -27,11 +26,22 @@ table .btn-show:hover i {
 table .text-center:hover {
     background-color: #ccc;
 }
+
+.hover:hover {
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.fs-14 {
+    font-size: 14px;
+}
 /* End common */
 
 /* Start header */
 .header-content {
-    height: 9.5vh;
+    height: 9.4vh;
 }
 
 .nav-item:hover {
@@ -74,18 +84,22 @@ table .text-center:hover {
 
 /* Start content */
 .row-content {
-    height: 90.5vh;
+    height: 90.6vh;
 }
 
 .table-show-detail-hr {
     border: 1px solid #ccc;
 }
 
+.scroll-content {
+    position: fixed;
+    overflow-y: scroll;
+    top: 9%;
+    right: 0;
+    left: 18%;
+}
+
 /* End content */
-
-/* Start footer */
-
-/* End footer */
 
 /* Css icon completed */
 #icon-loading {
@@ -101,7 +115,7 @@ table .text-center:hover {
     right: 22px;
 }
 
-@media only screen and (min-height: 1024px) {
+/* @media only screen and (min-width: 1200px) {
     .header-content {
         height: 7.4vh;
     }
@@ -109,4 +123,4 @@ table .text-center:hover {
     .row-content {
         height: 92.6vh;
     }
-}
+} */
