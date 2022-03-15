@@ -377,14 +377,13 @@ $(document).ready(function () {
         let id = $('input[name=id]').val();
         let companyId = $('#select-1').val();
         let workRoomId = $('#select-2').val();
-        let formData = new FormData($('#form')[0]);
-        formData.append('company_id', companyId);
-        formData.append('work_room_id', workRoomId);
-        $.post({
+        let formData = $('#form').serializeArray();
+        formData.push({name: 'company_id', value: companyId});
+        formData.push({name: 'work_room_id', value: workRoomId});
+        $.ajax({
+            type: 'PUT',
             url: urlApi + id,
             data: formData,
-            contentType: false,
-            processData: false,
             headers: {
                 'Accept': 'application/json',
             },

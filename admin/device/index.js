@@ -369,13 +369,12 @@ $(document).ready(function () {
     $(document).on('click', '.btn-update', function () {
         let id = $('input[name=id]').val();
         let memberId = $('#select-1').val();
-        let formData = new FormData($('#form')[0]);
-        formData.append('member_id', memberId)
-        $.post({
+        let formData = $('#form').serializeArray();
+        formData.push({name: 'member_id', value: memberId});
+        $.ajax({
+            type: 'PUT',
             url: urlApi + id,
             data: formData,
-            contentType: false,
-            processData: false,
             headers: {
                 'Accept': 'application/json',
             },

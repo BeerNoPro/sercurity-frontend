@@ -1,30 +1,35 @@
 $(document).ready(function () {
     // Link url api
     var urlApi = 'http://127.0.0.1:8000/api/view/home/';
-    var urlApiMember = 'http://127.0.0.1:8000/api/view/member/';
+    var urlApiClickProject = 'http://127.0.0.1:8000/api/view/member/';
+    var urlApiWorkRoom = 'http://127.0.0.1:8000/api/admin/work-room/';
+    var urlApiProject = 'http://127.0.0.1:8000/api/admin/project-edit/';
+    var urlApiMember = 'http://127.0.0.1:8000/api/admin/member-edit/';
+    var urlApiCompany = 'http://127.0.0.1:8000/api/admin/company/';
     var urlApiSearch = 'http://127.0.0.1:8000/api/view/search/';
-    var urlApiCompanyWorkRoom = 'http://127.0.0.1:8000/api/view/company-workroom/';
 
     // Edit placeholder input search
-    $('input[name=search]').attr('placeholder', 'Search name company...');
+    $('input[name=search]').attr('placeholder', 'Search...');
 
     // Add background color sidebar 
     $('.home').addClass('sidebar-color');
+
+    // Add class scroll content to div main
+    $('.content-all').addClass('scroll-content');
 
     // Get new date today
     var d = new Date();
     var strDate = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
 
-    // Get list content
+    // Get lists contents
     getContent(urlApi)
     function getContent(url) {
         $.get({
             url: url,
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
-                    // console.log(response.data);
                     // Render first value work room in array
                     $('.box-body-wr, .project-done, .project-doing, .tbody-work-room, .tbody-project, .tbody-member').html('');
                     $.each(response.data, function (key, valWorkRoom) {
@@ -59,10 +64,10 @@ $(document).ready(function () {
                                                 $('.tbody-member').append(`
                                                     <tr>
                                                         <td>${index++}</td>
-                                                        <td data-id="${val.member_id}" class="hover-text-click">
+                                                        <td data-id="${val.member_id}" class="hover-text-click tb-member">
                                                             ${val.member_name}
                                                         </td>
-                                                        <td data-id="${val.company_id}" class="hover-text-click">
+                                                        <td data-id="${val.company_id}" class="hover-text-click tb-company">
                                                             ${val.company_name}
                                                         </td>
                                                     </tr>
@@ -83,7 +88,7 @@ $(document).ready(function () {
                                 $('.tbody-project').append(`
                                     <tr>
                                         <td>${i++}</td>
-                                        <td data-id="${valProject.id}" class="hover-text-click">
+                                        <td data-id="${valProject.id}" class="hover-text-click tb-project">
                                             ${valProject.name}
                                         </td>
                                         <td>${valProject.time_start}</td>
@@ -103,7 +108,7 @@ $(document).ready(function () {
                             $('.tbody-work-room').append(`
                                 <tr>
                                     <td>1</td>
-                                    <td data-id="${valWorkRoom.id}" class="hover-text-click">
+                                    <td data-id="${valWorkRoom.id}" class="hover-text-click tb-wr">
                                         ${valWorkRoom.name}
                                     </td>
                                     <td>${valWorkRoom.location}</td>
@@ -123,13 +128,11 @@ $(document).ready(function () {
                     // Alert notification error
                     alertError(response.message);
                 }
-            }, error: function(error) {
-                console.log(error);
             }
         });
     }
 
-    // Function show content when click list work room
+    // Function show content when click list work rooms
     function showContent(data) {
         // console.log(data);
         $('.project-done, .project-doing, .tbody-work-room, .tbody-project, .tbody-member').html('');
@@ -138,7 +141,7 @@ $(document).ready(function () {
             $('.tbody-work-room').append(`
                 <tr>
                     <td>1</td>
-                    <td data-id="${valWorkRoom.id}" class="hover-text-click">
+                    <td data-id="${valWorkRoom.id}" class="hover-text-click tb-wr">
                         ${valWorkRoom.name}
                     </td>
                     <td>${valWorkRoom.location}</td>
@@ -146,6 +149,8 @@ $(document).ready(function () {
             `);
             if (valWorkRoom.project.length <= 0) {
                 $('.card-project, .card-member').addClass('d-none');
+                // Notification text not project in work room
+                $('.project-done').append('<div class="p-1 border">No projects register in work room</div>');
             } else {
                 $('.card-project, .card-member').removeClass('d-none');
                 // Render project
@@ -161,9 +166,8 @@ $(document).ready(function () {
                             </div>
                         `);
                     } else {
-                        console.log(keyProject);
                         // Render project doing
-                        if (keyProject == 0) {
+                        if (keyProject == 0 || keyProject == 1) {
                             var projectId = valProject.id
                             // Add color in first item
                             $('.project-doing').append(`
@@ -177,20 +181,17 @@ $(document).ready(function () {
                             $.each(valWorkRoom.member, function (key, val) {
                                 // console.log(val);
                                 if (val.project_id == projectId) {
-                                    // console.log('member project doing' + val);
                                     $('.tbody-member').append(`
                                         <tr>
                                             <td>${index++}</td>
-                                            <td data-id="${val.member_id}" class="hover-text-click">
+                                            <td data-id="${val.member_id}" class="hover-text-click tb-member">
                                                 ${val.member_name}
                                             </td>
-                                            <td data-id="${val.company_id}" class="hover-text-click">
+                                            <td data-id="${val.company_id}" class="hover-text-click tb-company">
                                                 ${val.company_name}
                                             </td>
                                         </tr>
                                     `);
-                                } else {
-                                    // console.log('member project done' + val);
                                 }
                             });
                         } else {
@@ -207,7 +208,7 @@ $(document).ready(function () {
                     $('.tbody-project').append(`
                         <tr>
                             <td>${i++}</td>
-                            <td data-id="${valProject.id}" class="hover-text-click">
+                            <td data-id="${valProject.id}" class="hover-text-click tb-project">
                                 ${valProject.name}
                             </td>
                             <td>${valProject.time_start}</td>
@@ -221,66 +222,65 @@ $(document).ready(function () {
 
     // Function get content table detail
     function contentTableDetail(data, table) {
-        $('.table-show-detail').html('');
+        $('.table-show-detail, #modalShowDetail h5').html('');
         $('#modalShowDetail').modal('show');
         switch (table) {
             case 'company':
-                $.each(data, function (key, item) {
-                    $('.table-show-detail').append(`
-                        <tr>
-                            <th>Name:</th>
-                            <td>${item.name}</td>
-                        </tr>
-                        <tr>
-                            <th>Address:</th>
-                            <td>${item.address}</td>
-                        </tr>
-                        <tr>
-                            <th>Email:</th>
-                            <td>${item.email}</td>
-                        </tr>
-                        <tr>
-                            <th>Phone:</th>
-                            <td>${item.phone}</td>
-                        </tr>
-                        <tr>
-                            <th>Date incorporation:</th>
-                            <td>${item.date_incorporation}</td>
-                        </tr>
-                        <tr>
-                            <th>Date created_at:</th>
-                            <td>${item.created_at}</td>
-                        </tr>
-                        <tr>
-                            <th>Date updated_at:</th>
-                            <td>${item.updated_at}</td>
-                        </tr>
-                    `);
-                });
+                $('#modalShowDetail h5').html('Content company details.');
+                $('.table-show-detail').append(`
+                    <tr>
+                        <th>Name:</th>
+                        <td>${data.name}</td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>${data.address}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>${data.email}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone:</th>
+                        <td>${data.phone}</td>
+                    </tr>
+                    <tr>
+                        <th>Date incorporation:</th>
+                        <td>${data.date_incorporation}</td>
+                    </tr>
+                    <tr>
+                        <th>Date created_at:</th>
+                        <td>${data.created_at}</td>
+                    </tr>
+                    <tr>
+                        <th>Date updated_at:</th>
+                        <td>${data.updated_at}</td>
+                    </tr>
+                `);
                 break;
-            case 'work_room':
-                $.each(data, function (key, item) {
-                    $('.table-show-detail').append(`
-                        <tr>
-                            <th>Name:</th>
-                            <td>${item.name}</td>
-                        </tr>
-                        <tr>
-                            <th>Location:</th>
-                            <td>${item.location}</td>
-                        </tr>
-                        <tr>
-                            <th>Date created_at:</th>
-                            <td>${item.created_at}</td>
-                        </tr>
-                        <tr>
-                            <th>Date updated_at:</th>
-                            <td>${item.updated_at}</td>
-                        </tr>
-                    `);
-                });
+            case 'work-room':
+                $('#modalShowDetail h5').html('Content work room details.');
+                $('.table-show-detail').append(`
+                    <tr>
+                        <th>Name:</th>
+                        <td>${data.name}</td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>${data.location}</td>
+                    </tr>
+                    <tr>
+                        <th>Date created_at:</th>
+                        <td>${data.created_at}</td>
+                    </tr>
+                    <tr>
+                        <th>Date updated_at:</th>
+                        <td>${data.updated_at}</td>
+                    </tr>
+                `);
                 break;
             case 'project':
+                $('#modalShowDetail h5').html('Content project details.');
                 $.each(data, function (key, item) {
                     $('.table-show-detail').append(`
                         <tr>
@@ -304,6 +304,10 @@ $(document).ready(function () {
                             <td>${item.company.address}</td>
                         </tr>
                         <tr>
+                            <th>Company email:</th>
+                            <td>${item.company.email}</td>
+                        </tr>
+                        <tr>
                             <th>Work room name:</th>
                             <td>${item.work_room.name}</td>
                         </tr>
@@ -312,33 +316,34 @@ $(document).ready(function () {
                             <td>${item.work_room.location}</td>
                         </tr>
                         <tr>
-                            <th>Date created_at:</th>
+                            <th>Date created:</th>
                             <td>${item.created_at}</td>
                         </tr>
                         <tr>
-                            <th>Date updated_at:</th>
+                            <th>Date updated:</th>
                             <td>${item.updated_at}</td>
                         </tr>
                     `);
                 });
                 break;
             default:
+                $('#modalShowDetail h5').html('Content member details.');
                 $.each(data, function (key, item) {
                     $('.table-show-detail').append(`
                         <tr>
-                            <th>Name:</th>
+                            <th>Member name:</th>
                             <td>${item.name}</td>
                         </tr>
                         <tr>
-                            <th>Email:</th>
+                            <th>Member email:</th>
                             <td>${item.email}</td>
                         </tr>
                         <tr>
-                            <th>Address:</th>
+                            <th>Member address:</th>
                             <td>${item.address}</td>
                         </tr>
                         <tr>
-                            <th>Phone:</th>
+                            <th>Phone number:</th>
                             <td>${item.phone_number}</td>
                         </tr>
                         <tr>
@@ -362,11 +367,15 @@ $(document).ready(function () {
                             <td>${item.company.address}</td>
                         </tr>
                         <tr>
-                            <th>Date created_at:</th>
+                            <th>Company email:</th>
+                            <td>${item.company.email}</td>
+                        </tr>
+                        <tr>
+                            <th>Date created:</th>
                             <td>${item.created_at}</td>
                         </tr>
                         <tr>
-                            <th>Date updated_at:</th>
+                            <th>Date updated:</th>
                             <td>${item.updated_at}</td>
                         </tr>
                     `);
@@ -381,7 +390,7 @@ $(document).ready(function () {
             url: url,
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status == 200) {
                     contentTableDetail(response.data, table);
                 } else {
@@ -392,13 +401,27 @@ $(document).ready(function () {
         });
     }
 
-    // Click show content detail table (work room, project, member)
-    $(document).on('click', '.hover-text-click', function () {
-        var id = $(this).attr('data-id');
-        console.log(id);
-    });
+    // Function show member content when click list projects
+    function showMember(data) {
+        var index = 1;
+        $('.tbody-member').html('');
+        $.each(data, function (key, val) {
+            // console.log(val);
+            $('.tbody-member').append(`
+                <tr>
+                    <td>${index++}</td>
+                    <td data-id="${val.id}" class="hover-text-click tb-member">
+                        ${val.name}
+                    </td>
+                    <td data-id="${val.company_id}" class="hover-text-click tb-company">
+                        ${val.company_name}
+                    </td>
+                </tr>
+            `);
+        });
+    }
 
-    // Click list content work room
+    // Click list content work rooms
     $(document).on('click', '.btn-work-room', function () {
         var id = $(this).attr('data-id');
         $('.btn-work-room').each(function () {
@@ -422,32 +445,88 @@ $(document).ready(function () {
         });
     });
 
+    // Click list content projects show members and companies
+    $(document).on('click', '.btn-project', function () {
+        var id = $(this).attr('data-id');
+        $('.btn-project').each(function () {
+            $('.btn-project').removeClass('btn-primary');
+        });
+        $(this).addClass('btn-primary');
+        $.get({
+            url: urlApiClickProject + id,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if (response.status == 200) {
+                    $.each(response.data, function (key, val) { 
+                        showMember(val.member_company)
+                    });
+                } else {
+                    // Alert notification error
+                    alertError(response.message);
+                }
+            }
+        });
+    });
+
+    // Click show content detail worm room
+    $(document).on('click', '.tb-wr', function () {
+        let id = $(this).attr('data-id');
+        let table = 'work-room';
+        let url = urlApiWorkRoom + id;
+        showContentDetail(url, table);
+    });
+
+    // Click show content detail project
+    $(document).on('click', '.tb-project', function () {
+        let id = $(this).attr('data-id');
+        let table = 'project';
+        let url = urlApiProject + id;
+        showContentDetail(url, table);
+    });
+
+    // Click show content detail member
+    $(document).on('click', '.tb-member', function () {
+        let id = $(this).attr('data-id');
+        let table = 'member';
+        let url = urlApiMember + id;
+        showContentDetail(url, table);
+    });
+
+    // Click show content detail company
+    $(document).on('click', '.tb-company', function () {
+        let id = $(this).attr('data-id');
+        let table = 'company';
+        let url = urlApiCompany + id;
+        showContentDetail(url, table);
+    });
+
     // show list suggestions content
     $('input[name=search]').keyup(function () {
         let nameSearch = $(this).val().replace(/ /g, "");
-        if (nameSearch != '') {
-            $.get({
-                url: urlApiSearch + nameSearch,
-                dataType: 'json',
-                success: function (response) {
-                    // console.log(response.data);
-                    if (response.status == 200) {
-                        $('.result-search').removeClass('d-none');
-                        $('.result-search').html('');
-                        $.each(response.data, function (key, item) {
-                            // console.log(item);
-                            $('.result-search').append(`
-                                <li class="hover-text-click" data-id="${item.id}" >${item.company.name}</li>
-                            `);
-                        });
-                    } else {
-                        $('.result-search').addClass('d-none');
-                    }
-                }
-            });
-        } else {
-            $('.result-search').addClass('d-none');
-        }
+        // if (nameSearch != '') {
+        //     $.get({
+        //         url: urlApiSearch + nameSearch,
+        //         dataType: 'json',
+        //         success: function (response) {
+        //             // console.log(response.data);
+        //             if (response.status == 200) {
+        //                 $('.result-search').removeClass('d-none');
+        //                 $('.result-search').html('');
+        //                 $.each(response.data, function (key, item) {
+        //                     // console.log(item);
+        //                     $('.result-search').append(`
+        //                         <li class="hover-text-click" data-id="${item.id}" >${item.company.name}</li>
+        //                     `);
+        //                 });
+        //             } else {
+        //                 $('.result-search').addClass('d-none');
+        //             }
+        //         }
+        //     });
+        // } else {
+        //     $('.result-search').addClass('d-none');
+        // }
     }); 
 
     // Click show suggestions content detail
@@ -464,50 +543,19 @@ $(document).ready(function () {
     $(document).on('click', '.btn-search', function (e) {
         e.preventDefault();
         let contentSearch = $('input[name=search]').val();
-        $.get({
-            url: urlApiSearch + contentSearch,
-            dataType: "json",
-            success: function (response) {
-                if (response.status == 200) {
-                    contentTableDetail(response.data, table = 'cabinet');
-                } else {
-                    // Alert notification add fail
-                    alertError(response.message);
-                }
-            }
-        });
+        // $.get({
+        //     url: urlApiSearch + contentSearch,
+        //     dataType: "json",
+        //     success: function (response) {
+        //         console.log(response);
+        //         if (response.status == 200) {
+        //             // contentTableDetail(response.data, table = 'cabinet');
+        //         } else {
+        //             // Alert notification add fail
+        //             alertError(response.message);
+        //         }
+        //     }
+        // });
     });
 
-    // Click show content detail company and worm room
-    $(document).on('click', '.tb-item', function () {
-        let id = $(this).attr('data-id');
-        let table = $(this).attr('data-tb');
-        let url = urlApiCompanyWorkRoom + table + '/' + id;
-        showContentDetail(url, table);
-    });
-
-    // Click show content detail project
-    $(document).on('click', '.tb-project', function () {
-        let id = $(this).attr('data-id');
-        let table = 'project';
-        let url = urlApi + id;
-        showContentDetail(url, table);
-    });
-
-    // Click show content detail member
-    $(document).on('click', '.tb-member', function () {
-        let id = $(this).attr('data-id');
-        let table = 'member';
-        let url = urlApiMember + id;
-        showContentDetail(url, table);
-    });
-
-    // Click pages pagination
-    $(document).on('click', '.page-item', function (e) {
-        e.preventDefault();
-        let linkPage = $(this).find('a').attr('href');
-        if (linkPage != 'null') {
-            getContent(linkPage)
-        }
-    });
 });

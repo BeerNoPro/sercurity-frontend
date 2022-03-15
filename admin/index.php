@@ -84,17 +84,12 @@ require_once('./layout/header.php');
             </div>
         </div>
     </div>
-
-    <!-- Pagination -->
-    <div id="show-pagination" class="custom-pagination">
-        <ul class="pagination justify-content-center mt-4"></ul>
-    </div>
     <!-- Start modal show detail -->
     <div class="modal" tabindex="-1" id="modalShowDetail">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="border mt-2 p-2 rounded-3" class="modal-title">Show content detail</h5>
+                    <h5 class="mt-2 p-2 rounded-3" class="modal-title">Show content detail</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

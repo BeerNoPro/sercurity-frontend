@@ -288,12 +288,11 @@ $(document).ready(function () {
     // Update content
     $(document).on('click', '.btn-update', function () {
         let id = $('input[name=id]').val();
-        let formData = new FormData($('#form')[0]);
-        $.post({
+        let formData = $('#form').serialize();
+        $.ajax({
+            type: "PUT",
             url: urlApi + id,
             data: formData,
-            contentType: false,
-            processData: false,
             headers: {
                 'Accept': 'application/json',
             },

@@ -94,9 +94,9 @@ table .text-center:hover {
 .scroll-content {
     position: fixed;
     overflow-y: scroll;
-    top: 9%;
+    top: 10%;
     right: 0;
-    left: 18%;
+    height: 90.6vh;
 }
 
 /* End content */

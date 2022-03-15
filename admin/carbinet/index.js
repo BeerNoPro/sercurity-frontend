@@ -382,14 +382,13 @@ $(document).ready(function () {
         let id = $('input[name=id]').val();
         let workRoomId = $('#select-1').val();
         let memberId = $('#select-2').val();
-        let formData = new FormData($('#form')[0]);
-        formData.append('work_room_id', workRoomId);
-        formData.append('member_id', memberId);
-        $.post({
+        let formData = $('#form').serializeArray();
+        formData.push({name: 'work_room_id', value: workRoomId});
+        formData.push({name: 'member_id', value: memberId});
+        $.ajax({
+            type: 'PUT',
             url: urlApi + id,
             data: formData,
-            contentType: false,
-            processData: false,
             headers: {
                 'Accept': 'application/json',
             },

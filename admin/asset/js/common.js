@@ -17,6 +17,11 @@ $(document).ready(function () {
         $('#save_error_list').addClass('d-none');
     });
 
+    //Reset error when click edit form
+    $(document).on('click', '.btn-edit', function () {
+        $('#save_error_list').addClass('d-none');
+    });
+
     // Show and hide icon ajax completed
     $(document).ajaxStart(function(){
         $("#icon-loading").removeClass("d-none");

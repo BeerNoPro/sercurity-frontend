@@ -345,17 +345,19 @@ $(document).ready(function () {
     $(document).on('click', '.btn-update', function () {
         let id = $('input[name=id]').val();
         let companyId = $('#select-1').val();
-        let formData = new FormData($('#form')[0]);
-        formData.append('company_id', companyId)
-        $.post({
+        // let formData = new FormData($('#form')[0]);
+        // formData.append('company_id', companyId)
+        let formData = $('#form').serializeArray();
+        formData.push({name: "company_id", value: companyId});
+        $.ajax({
+            type: 'PUT',
             url: urlApi + id,
             data: formData,
-            contentType: false,
-            processData: false,
             headers: {
                 'Accept': 'application/json',
             },
             success: function (response) {
+                // console.log(response);
                 if (response.status == 200) {
                     // Alert notification add success
                     alertSuccess(response.message);

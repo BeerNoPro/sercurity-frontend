@@ -41,7 +41,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="post" id="form">
+                        <form action="" method="" id="form">
                             <ul class="alert alert-warning d-none" id="save_error_list"></ul>
                             <input type="hidden" value="" name="id">
                             <div class="form-group mt-3">

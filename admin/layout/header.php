@@ -1,10 +1,4 @@
 
-<?php
-   
-//    $baseUrl = '..';
-    
-?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -126,5 +120,5 @@
                         </ul>
                     </div>
                 </nav>
-                <main role="main" class="col-md-10">
+                <main role="main" class="col-md-10 content-all">
                     
