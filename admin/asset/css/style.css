@@ -115,7 +115,17 @@ table .text-center:hover {
     right: 22px;
 }
 
-/* @media only screen and (min-width: 1200px) {
+@media screen and (min-width: 1200px) {
+    .header-content {
+        height: 7.4vh;
+    }
+
+    .row-content {
+        height: 92.6vh;
+    }
+}
+
+/* @media only screen and (min-width: 1600px) {
     .header-content {
         height: 7.4vh;
     }

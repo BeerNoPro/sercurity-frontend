@@ -15,7 +15,7 @@ $(document).ready(function () {
     $('.home').addClass('sidebar-color');
 
     // Add class scroll content to div main
-    $('.content-all').addClass('scroll-content');
+    // $('.content-all').addClass('scroll-content');
 
     // Get new date today
     var d = new Date();
